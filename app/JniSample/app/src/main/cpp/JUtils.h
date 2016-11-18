@@ -8,27 +8,30 @@ class JObject;
 class JClass;
 
 namespace JUtils {
-    char to_type(jboolean);
 
-    char to_type(jbyte);
+    jboolean flatten(jboolean &);
+    jbyte flatten(jbyte &);
+    jchar flatten(jchar &);
+    jshort flatten(jshort &);
+    jint flatten(jint &);
+    jlong flatten(jlong &);
+    jfloat flatten(jfloat &);
+    jdouble flatten(jdouble &);
+    jstring flatten(jstring &);
+    jobject flatten(JObject &);
+    jclass flatten(JClass &);
 
-    char to_type(jchar);
-
-    char to_type(jshort);
-
-    char to_type(jint);
-
-    char to_type(jlong);
-
-    char to_type(jfloat);
-
-    char to_type(jdouble);
-
-    std::string to_type(jstring);
-
-    std::string to_type(JObject *);
-
-    std::string to_type(JClass *);
+    char to_type(jboolean &);
+    char to_type(jbyte &);
+    char to_type(jchar &);
+    char to_type(jshort &);
+    char to_type(jint &);
+    char to_type(jlong &);
+    char to_type(jfloat &);
+    char to_type(jdouble &);
+    std::string to_type(jstring &);
+    std::string to_type(JObject &);
+    std::string to_type(JClass &);
 
     // TODO: array
 
@@ -48,7 +51,7 @@ namespace JUtils {
         stream << "(";
         using List= int[];
         (void) List{0, ((void) (stream << to_type(args)), 0) ...};
-        stream << ")L" << to_type(return_type) << ';';
+        stream << ")" << to_type(return_type);
         return stream.str();
     }
 };
