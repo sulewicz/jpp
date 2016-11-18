@@ -16,6 +16,7 @@ Java_org_coderoller_jnisample_MainActivity_stringFromJNI(
     JClass integerClass(env, "java/lang/Integer");
     auto integerObject = integerClass.construct(3);
 
+    auto result = listObject.boolean("add", &integerObject);
     /*auto size = listObject.call<jint>("size");
     auto isEmpty = listObject.call<jboolean>("isEmpty");
 

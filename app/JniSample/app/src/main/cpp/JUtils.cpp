@@ -39,10 +39,10 @@ std::string JUtils::to_type(jstring) {
     return "Ljava/lang/String;";
 }
 
-std::string JUtils::to_type(const JObject &object) {
-    return to_type(*object.get_class());
+std::string JUtils::to_type(JObject *object) {
+    return to_type(object->get_class());
 }
 
-std::string JUtils::to_type(const JClass &_class) {
-    return std::string("L") + _class.get_class_name() + ';';
+std::string JUtils::to_type(JClass *_class) {
+    return std::string("L") + _class->get_class_name() + ';';
 }

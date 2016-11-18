@@ -1,6 +1,7 @@
 #pragma once
 
 #include <jni.h>
+#include "JUtils.h"
 
 class JClass;
 
@@ -14,18 +15,22 @@ public:
 
     JClass *get_class() const;
 
-/*    template<class ... Types>
-    JObject call(const char* method_name, JClass *return_type, Types ... args) {
-        jobject result = nullptr;
+    template<class ... Types>
+    JObject object(const char* method_name, const JClass& return_type, Types ... args) {
         auto signature = JUtils::generate_signature(return_type, args...);
-        jmethodID method_id = m_class->get_env()->GetMethodID(m_class->get_jclass(), method_name, signature.c_str());
-        if (method_id) {
-            result = m_class->get_env()->CallObjectMethod(m_object, method_id, args...);
-        }
-        return JObject(m_class, result);
-    }*/
+        return do_object(method_name, signature.c_str(), args...);
+    }
+
+    template<class ... Types>
+    jboolean boolean(const char* method_name, Types ... args) {
+        auto signature = JUtils::generate_signature(jboolean(), args...);
+        return do_boolean(method_name, signature.c_str(), args...);
+    }
 
 private:
+    JObject do_object(const char* method_name, const char *signature, ...);
+    jboolean do_boolean(const char* method_name, const char *signature, ...);
+
     JClass * const m_class;
     jobject m_object = nullptr;
 };

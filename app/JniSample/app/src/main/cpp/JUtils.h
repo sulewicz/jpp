@@ -26,14 +26,14 @@ namespace JUtils {
 
     std::string to_type(jstring);
 
-    std::string to_type(const JObject &);
+    std::string to_type(JObject *);
 
-    std::string to_type(const JClass &);
+    std::string to_type(JClass *);
 
     // TODO: array
 
     template<class ... Types>
-    std::string generate_signature(Types ... args) {
+    std::string generate_void_signature(Types ... args) {
         std::ostringstream stream;
         stream << "(";
         using List= int[];
@@ -42,13 +42,13 @@ namespace JUtils {
         return stream.str();
     }
 
-    template<class ... Types>
-    std::string generate_signature(JClass *return_type, Types ... args) {
+    template<class Type, class ... Types>
+    std::string generate_signature(Type return_type, Types ... args) {
         std::ostringstream stream;
         stream << "(";
         using List= int[];
         (void) List{0, ((void) (stream << to_type(args)), 0) ...};
-        stream << ")L" << to_type(*return_type) << ';';
+        stream << ")L" << to_type(return_type) << ';';
         return stream.str();
     }
 };

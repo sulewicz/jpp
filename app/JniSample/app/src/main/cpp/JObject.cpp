@@ -27,3 +27,27 @@ bool JObject::is_valid() const {
 JClass *JObject::get_class() const {
     return m_class;
 }
+
+JObject JObject::do_object(const char* method_name, const char *signature, ...) {
+    jobject result = nullptr;
+    jmethodID method_id = m_class->get_env()->GetMethodID(m_class->get_jclass(), method_name, signature);
+    if (method_id) {
+        va_list vl;
+        va_start(vl, signature);
+        result = m_class->get_env()->CallObjectMethodV(m_class->get_jclass(), method_id, vl);
+        va_end(vl);
+    }
+    return JObject(m_class, result);
+}
+
+jboolean JObject::do_boolean(const char* method_name, const char *signature, ...) {
+    jboolean result = false;
+    jmethodID method_id = m_class->get_env()->GetMethodID(m_class->get_jclass(), method_name, signature);
+    if (method_id) {
+        va_list vl;
+        va_start(vl, signature);
+        result = m_class->get_env()->CallBooleanMethodV(m_class->get_jclass(), method_id, vl);
+        va_end(vl);
+    }
+    return result;
+}

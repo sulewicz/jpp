@@ -17,7 +17,7 @@ public:
 
     template<class ... Types>
     JObject construct(Types ... args) {
-        auto signature = JUtils::generate_signature(args...);
+        auto signature = JUtils::generate_void_signature(args...);
         return do_construct(signature.c_str(), args...);
     }
 
