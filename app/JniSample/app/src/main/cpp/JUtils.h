@@ -3,7 +3,9 @@
 #include <jni.h>
 #include <string>
 #include <sstream>
-#include "JObject.h"
+
+class JObject;
+class JClass;
 
 namespace JUtils {
     char to_type(jboolean);
@@ -25,6 +27,9 @@ namespace JUtils {
     std::string to_type(jstring);
 
     std::string to_type(const JObject &);
+
+    std::string to_type(const JClass &);
+
     // TODO: array
 
     template<class ... Types>
@@ -34,6 +39,16 @@ namespace JUtils {
         using List= int[];
         (void) List{0, ((void) (stream << to_type(args)), 0) ...};
         stream << ")V";
+        return stream.str();
+    }
+
+    template<class ... Types>
+    std::string generate_signature(JClass *return_type, Types ... args) {
+        std::ostringstream stream;
+        stream << "(";
+        using List= int[];
+        (void) List{0, ((void) (stream << to_type(args)), 0) ...};
+        stream << ")L" << to_type(*return_type) << ';';
         return stream.str();
     }
 };

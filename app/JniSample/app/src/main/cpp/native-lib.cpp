@@ -2,7 +2,6 @@
 #include <string>
 
 #include "JClass.h"
-#include "JUtils.h"
 
 extern "C"
 jstring
@@ -16,7 +15,6 @@ Java_org_coderoller_jnisample_MainActivity_stringFromJNI(
 
     JClass integerClass(env, "java/lang/Integer");
     auto integerObject = integerClass.construct(3);
-    hello = JUtils::generate_signature(3);
 
     /*auto size = listObject.call<jint>("size");
     auto isEmpty = listObject.call<jboolean>("isEmpty");

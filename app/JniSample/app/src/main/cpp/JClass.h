@@ -2,28 +2,29 @@
 
 #include <jni.h>
 #include "JUtils.h"
+#include "JObject.h"
 
 class JClass {
 public:
-    JClass(JNIEnv *env, const char *className);
+    JClass(JNIEnv *env, const char *class_name);
     JClass(const JClass& other);
     ~JClass();
 
+    bool is_valid() const;
+    const char *get_class_name() const;
+    JNIEnv *get_env() const;
+    jclass get_jclass() const;
+
     template<class ... Types>
-    jobject construct(Types ... args) {
-        jobject result = nullptr;
+    JObject construct(Types ... args) {
         auto signature = JUtils::generate_signature(args...);
-        jmethodID methodId = m_env->GetMethodID(m_class,  "<init>", signature.c_str());
-        if (methodId) {
-            result = m_env->NewObject(m_class, methodId, args...);
-        }
-        return result;
+        return do_construct(signature.c_str(), args...);
     }
 
-    bool is_valid() const;
-
 private:
+    JObject do_construct(const char *signature, ...);
+
     JNIEnv * const m_env;
-    jclass m_class = nullptr;
-    const char *m_className;
+    jclass m_jclass = nullptr;
+    const char *m_class_name;
 };

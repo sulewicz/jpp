@@ -1,5 +1,8 @@
 #include "JUtils.h"
 
+#include "JClass.h"
+#include "JObject.h"
+
 char JUtils::to_type(jboolean) {
     return 'Z';
 }
@@ -36,6 +39,10 @@ std::string JUtils::to_type(jstring) {
     return "Ljava/lang/String;";
 }
 
-std::string JUtils::to_type(const JObject &) {
-    return ""; //TODO: implement
+std::string JUtils::to_type(const JObject &object) {
+    return to_type(*object.get_class());
+}
+
+std::string JUtils::to_type(const JClass &_class) {
+    return std::string("L") + _class.get_class_name() + ';';
 }
