@@ -1,20 +1,20 @@
 #include <jni.h>
 #include <string>
 
-#include "JClass.h"
+#include "jpp/jpp.h"
 
 extern "C"
 jstring
 Java_org_coderoller_jnisample_MainActivity_stringFromJNI(
         JNIEnv* env,
         jobject /* this */) {
-    JClass listClass(env, "java/util/ArrayList");
+    jpp::Class listClass(env, "java/util/ArrayList");
     auto listObject = listClass.construct();
 
-    JClass integerClass(env, "java/lang/Integer");
+    jpp::Class integerClass(env, "java/lang/Integer");
     auto integerObject = integerClass.construct(3);
 
-    JClass stringClass(env, "java/lang/String");
+    jpp::Class stringClass(env, "java/lang/String");
     auto str = integerObject.object("toString", stringClass);
 
     /*auto result = listObject.boolean("add", integerObject);
@@ -24,6 +24,6 @@ Java_org_coderoller_jnisample_MainActivity_stringFromJNI(
     auto integerObject = JClass(env, "java.lang.Integer").construct(JInt(3));
     auto success = listObject.call<jboolean>("add", integerObject);*/
 
-    jstring ret = (jstring) str.get_local_ref();
+    jstring ret = (jstring) env->NewLocalRef(str.get_jobject());
     return ret;
 }
