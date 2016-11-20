@@ -19,6 +19,7 @@ add_library( # Sets the name of the library.
              # Associated headers in the same location as their source
              # file are automatically included.
              src/main/cpp/creation_tester.cpp
+             src/main/cpp/method_tester.cpp
              src/main/cpp/jpp/Class.cpp
              src/main/cpp/jpp/Object.cpp
              src/main/cpp/jpp/internal/utils.cpp )

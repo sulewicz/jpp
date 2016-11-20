@@ -19,7 +19,7 @@ namespace jpp {
         jclass get_jclass() const;
         jobject get_jobject() const;
 
-        template<class ... Types>
+        /*template<class ... Types>
         Object object(const char *method_name, Class &return_type, Types ... args) {
             auto signature = utils::generate_signature(return_type, args...);
             return do_object(method_name, return_type, signature.c_str(), utils::flatten(args)...);
@@ -29,11 +29,36 @@ namespace jpp {
         jboolean boolean(const char *method_name, Types ... args) {
             auto signature = utils::generate_signature(jboolean(), args...);
             return do_boolean(method_name, signature.c_str(), utils::flatten(args)...);
+        }*/
+        /*template<class ... Types>
+        Object call(const char *method_name, Class &return_type, Types ... args) {
+            auto signature = utils::generate_signature(return_type, args...);
+            return return_object(method_name, return_type, signature.c_str(), utils::flatten(args)...);
+        }*/
+
+        template<class ... Types>
+        Object call_object(const char *method_name, Class &return_type, Types ... args) {
+            auto signature = utils::generate_signature(return_type, args...);
+            return run_object(method_name, return_type, signature.c_str(), utils::flatten(args)...);
+        }
+
+        template<class ... Types>
+        void call_void(const char *method_name, Types ... args) {
+            auto signature = utils::generate_signature((void*)0, args...);
+            run_void(method_name, signature.c_str(), utils::flatten(args)...);
+        }
+
+        template<class Ret, class ... Types>
+        Ret call(const char *method_name, Types ... args) {
+            auto signature = utils::generate_signature(Ret(), args...);
+            return run(Ret(), method_name, signature.c_str(), utils::flatten(args)...);
         }
 
     private:
-        Object do_object(const char *method_name, Class &return_type, const char *signature, ...);
-        jboolean do_boolean(const char *method_name, const char *signature, ...);
+        Object run_object(const char *method_name, Class &return_type, const char *signature, ...);
+        void run_void(const char *method_name, const char *signature, ...);
+        template<class Ret>
+        Ret run(Ret, const char *method_name, const char *signature, ...);
 
         Class *const m_class;
         jobject m_jobject = nullptr;

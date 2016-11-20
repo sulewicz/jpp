@@ -18,7 +18,7 @@ namespace jpp {
 
         template<class ... Types>
         Object construct(Types ... args) {
-            auto signature = utils::generate_void_signature(args...);
+            auto signature = utils::generate_signature((void*)0, args...);
             return do_construct(signature.c_str(), args...);
         }
 

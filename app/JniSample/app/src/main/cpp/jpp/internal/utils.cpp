@@ -79,6 +79,10 @@ char utils::to_type(jdouble &) {
     return 'D';
 }
 
+char utils::to_type(void *) {
+    return 'V';
+}
+
 std::string utils::to_type(jstring &) {
     return "Ljava/lang/String;";
 }

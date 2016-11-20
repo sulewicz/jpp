@@ -29,21 +29,12 @@ namespace jpp {
         char to_type(jlong &);
         char to_type(jfloat &);
         char to_type(jdouble &);
+        char to_type(void *);
         std::string to_type(jstring &);
         std::string to_type(Object &);
         std::string to_type(Class &);
 
         // TODO: array
-
-        template<class ... Types>
-        std::string generate_void_signature(Types ... args) {
-            std::ostringstream stream;
-            stream << "(";
-            using List= int[];
-            (void) List{0, ((void) (stream << to_type(args)), 0) ...};
-            stream << ")V";
-            return stream.str();
-        }
 
         template<class Type, class ... Types>
         std::string generate_signature(Type return_type, Types ... args) {
