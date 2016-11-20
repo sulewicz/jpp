@@ -19,27 +19,10 @@ namespace jpp {
         jclass get_jclass() const;
         jobject get_jobject() const;
 
-        /*template<class ... Types>
-        Object object(const char *method_name, Class &return_type, Types ... args) {
-            auto signature = utils::generate_signature(return_type, args...);
-            return do_object(method_name, return_type, signature.c_str(), utils::flatten(args)...);
-        }
-
-        template<class ... Types>
-        jboolean boolean(const char *method_name, Types ... args) {
-            auto signature = utils::generate_signature(jboolean(), args...);
-            return do_boolean(method_name, signature.c_str(), utils::flatten(args)...);
-        }*/
-        /*template<class ... Types>
-        Object call(const char *method_name, Class &return_type, Types ... args) {
-            auto signature = utils::generate_signature(return_type, args...);
-            return return_object(method_name, return_type, signature.c_str(), utils::flatten(args)...);
-        }*/
-
         template<class ... Types>
         Object call_object(const char *method_name, Class &return_type, Types ... args) {
             auto signature = utils::generate_signature(return_type, args...);
-            return run_object(method_name, return_type, signature.c_str(), utils::flatten(args)...);
+            return run_object(return_type, method_name, signature.c_str(), utils::flatten(args)...);
         }
 
         template<class ... Types>
@@ -55,10 +38,35 @@ namespace jpp {
         }
 
     private:
-        Object run_object(const char *method_name, Class &return_type, const char *signature, ...);
-        void run_void(const char *method_name, const char *signature, ...);
+        inline Object run_object(Class &return_type, const char *method_name, const char *signature, ...) {
+            va_list vl;
+            va_start(vl, signature);
+            auto ret = vrun(return_type, method_name, signature, vl);
+            va_end(vl);
+            return ret;
+        }
+
+        inline void run_void(const char *method_name, const char *signature, ...) {
+            va_list vl;
+            va_start(vl, signature);
+            vrun(method_name, signature, vl);
+            va_end(vl);
+        }
+
         template<class Ret>
-        Ret run(Ret, const char *method_name, const char *signature, ...);
+        inline Ret run(Ret type, const char *method_name, const char *signature, ...) {
+            va_list vl;
+            va_start(vl, signature);
+            auto ret = vrun(type, method_name, signature, vl);
+            va_end(vl);
+            return ret;
+        }
+
+        Object vrun(Class &return_type, const char *method_name, const char *signature, va_list vl);
+        void vrun(const char *method_name, const char *signature, va_list vl);
+        template<class Ret>
+        Ret vrun(Ret, const char *method_name, const char *signature, va_list vl);
+
 
         Class *const m_class;
         jobject m_jobject = nullptr;

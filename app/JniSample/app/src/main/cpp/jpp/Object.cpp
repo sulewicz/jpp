@@ -1,5 +1,6 @@
 #include "Object.h"
 #include "Class.h"
+#include <functional>
 
 using namespace jpp;
 
@@ -42,63 +43,63 @@ jobject Object::get_jobject() const {
     return m_jobject;
 }
 
-Object Object::run_object(const char *method_name, Class &return_type, const char *signature, ...) {
-    jobject result = nullptr;
-    jmethodID method_id = get_env()->GetMethodID(get_jclass(), method_name, signature);
+template<class Ret>
+static inline Ret run_jni(Object *self, const char *method_name, const char *signature,
+                          std::function<Ret(jmethodID)> jni_call) {
+    Ret ret;
+    auto env = self->get_env();
+    jmethodID method_id = env->GetMethodID(self->get_jclass(), method_name, signature);
     if (method_id) {
-        va_list vl;
-        va_start(vl, signature);
-        result = get_env()->CallObjectMethodV(m_jobject, method_id, vl);
-        va_end(vl);
+        ret = jni_call(method_id);
     }
-    return Object(&return_type, result);
+    return ret;
+};
+
+template<>
+static inline void run_jni(Object *self, const char *method_name, const char *signature,
+                           std::function<void(jmethodID)> jni_call) {
+    auto env = self->get_env();
+    jmethodID method_id = env->GetMethodID(self->get_jclass(), method_name, signature);
+    if (method_id) {
+        jni_call(method_id);
+    }
+};
+
+Object Object::vrun(Class &return_type, const char *method_name, const char *signature, va_list vl) {
+    auto jni_call = [&](jmethodID method_id) {
+        return get_env()->CallObjectMethodV(m_jobject, method_id, vl);
+    };
+    auto ret = run_jni<jobject>(this, method_name, signature, jni_call);
+    return Object(m_class, ret);
 }
 
-void Object::run_void(const char *method_name, const char *signature, ...) {
-    jmethodID method_id = get_env()->GetMethodID(get_jclass(), method_name, signature);
-    if (method_id) {
-        va_list vl;
-        va_start(vl, signature);
+void Object::vrun(const char *method_name, const char *signature, va_list vl) {
+    auto jni_call = [&](jmethodID method_id) {
         get_env()->CallVoidMethodV(m_jobject, method_id, vl);
-        va_end(vl);
-    }
+    };
+    run_jni<void>(this, method_name, signature, jni_call);
 }
 
-template <>
-jboolean Object::run(jboolean, const char *method_name, const char *signature, ...) {
-    jboolean ret = false;
-    jmethodID method_id = get_env()->GetMethodID(get_jclass(), method_name, signature);
-    if (method_id) {
-        va_list vl;
-        va_start(vl, signature);
-        ret = get_env()->CallBooleanMethodV(m_jobject, method_id, vl);
-        va_end(vl);
-    }
-    return ret;
+template<>
+jboolean Object::vrun(jboolean, const char *method_name, const char *signature, va_list vl) {
+    auto jni_call = [&](jmethodID method_id) {
+        return get_env()->CallBooleanMethodV(m_jobject, method_id, vl);
+    };
+    return run_jni<jboolean>(this, method_name, signature, jni_call);
 }
 
-template <>
-jbyte Object::run(jbyte, const char *method_name, const char *signature, ...) {
-    jbyte ret = 0;
-    jmethodID method_id = get_env()->GetMethodID(get_jclass(), method_name, signature);
-    if (method_id) {
-        va_list vl;
-        va_start(vl, signature);
-        ret = get_env()->CallByteMethodV(m_jobject, method_id, vl);
-        va_end(vl);
-    }
-    return ret;
+template<>
+jbyte Object::vrun(jbyte, const char *method_name, const char *signature, va_list vl) {
+    auto jni_call = [&](jmethodID method_id) {
+        return get_env()->CallByteMethodV(m_jobject, method_id, vl);
+    };
+    return run_jni<jbyte>(this, method_name, signature, jni_call);
 }
 
-template <>
-jchar Object::run(jchar, const char *method_name, const char *signature, ...) {
-    jchar ret = 0;
-    jmethodID method_id = get_env()->GetMethodID(get_jclass(), method_name, signature);
-    if (method_id) {
-        va_list vl;
-        va_start(vl, signature);
-        ret = get_env()->CallCharMethodV(m_jobject, method_id, vl);
-        va_end(vl);
-    }
-    return ret;
+template<>
+jchar Object::vrun(jchar, const char *method_name, const char *signature, va_list vl) {
+    auto jni_call = [&](jmethodID method_id) {
+        return get_env()->CallCharMethodV(m_jobject, method_id, vl);
+    };
+    return run_jni<jchar>(this, method_name, signature, jni_call);
 }
