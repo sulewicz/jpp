@@ -66,40 +66,70 @@ static inline void run_jni(Object *self, const char *method_name, const char *si
 };
 
 Object Object::vrun(Class &return_type, const char *method_name, const char *signature, va_list vl) {
-    auto jni_call = [&](jmethodID method_id) {
+    auto ret = run_jni<jobject>(this, method_name, signature, [&](jmethodID method_id) {
         return get_env()->CallObjectMethodV(m_jobject, method_id, vl);
-    };
-    auto ret = run_jni<jobject>(this, method_name, signature, jni_call);
+    });
     return Object(m_class, ret);
 }
 
 void Object::vrun(const char *method_name, const char *signature, va_list vl) {
-    auto jni_call = [&](jmethodID method_id) {
+    run_jni<void>(this, method_name, signature, [&](jmethodID method_id) {
         get_env()->CallVoidMethodV(m_jobject, method_id, vl);
-    };
-    run_jni<void>(this, method_name, signature, jni_call);
+    });
 }
 
 template<>
 jboolean Object::vrun(jboolean, const char *method_name, const char *signature, va_list vl) {
-    auto jni_call = [&](jmethodID method_id) {
+    return run_jni<jboolean>(this, method_name, signature, [&](jmethodID method_id) {
         return get_env()->CallBooleanMethodV(m_jobject, method_id, vl);
-    };
-    return run_jni<jboolean>(this, method_name, signature, jni_call);
+    });
 }
 
 template<>
 jbyte Object::vrun(jbyte, const char *method_name, const char *signature, va_list vl) {
-    auto jni_call = [&](jmethodID method_id) {
+    return run_jni<jbyte>(this, method_name, signature, [&](jmethodID method_id) {
         return get_env()->CallByteMethodV(m_jobject, method_id, vl);
-    };
-    return run_jni<jbyte>(this, method_name, signature, jni_call);
+    });
 }
 
 template<>
 jchar Object::vrun(jchar, const char *method_name, const char *signature, va_list vl) {
-    auto jni_call = [&](jmethodID method_id) {
+    return run_jni<jchar>(this, method_name, signature, [&](jmethodID method_id) {
         return get_env()->CallCharMethodV(m_jobject, method_id, vl);
-    };
-    return run_jni<jchar>(this, method_name, signature, jni_call);
+    });
+}
+
+template<>
+jshort Object::vrun(jshort, const char *method_name, const char *signature, va_list vl) {
+    return run_jni<jshort>(this, method_name, signature, [&](jmethodID method_id) {
+        return get_env()->CallShortMethodV(m_jobject, method_id, vl);
+    });
+}
+
+template<>
+jint Object::vrun(jint, const char *method_name, const char *signature, va_list vl) {
+    return run_jni<jint>(this, method_name, signature, [&](jmethodID method_id) {
+        return get_env()->CallIntMethodV(m_jobject, method_id, vl);
+    });
+}
+
+template<>
+jlong Object::vrun(jlong, const char *method_name, const char *signature, va_list vl) {
+    return run_jni<jlong>(this, method_name, signature, [&](jmethodID method_id) {
+        return get_env()->CallLongMethodV(m_jobject, method_id, vl);
+    });
+}
+
+template<>
+jfloat Object::vrun(jfloat, const char *method_name, const char *signature, va_list vl) {
+    return run_jni<jfloat>(this, method_name, signature, [&](jmethodID method_id) {
+        return get_env()->CallFloatMethodV(m_jobject, method_id, vl);
+    });
+}
+
+template<>
+jdouble Object::vrun(jdouble, const char *method_name, const char *signature, va_list vl) {
+    return run_jni<jdouble>(this, method_name, signature, [&](jmethodID method_id) {
+        return get_env()->CallDoubleMethodV(m_jobject, method_id, vl);
+    });
 }

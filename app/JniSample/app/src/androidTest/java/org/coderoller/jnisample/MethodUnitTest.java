@@ -1,5 +1,6 @@
 package org.coderoller.jnisample;
 
+import android.support.test.espresso.core.deps.guava.primitives.Shorts;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.coderoller.jnisample.testers.MethodTester;
@@ -48,13 +49,43 @@ public class MethodUnitTest {
 
     @Test
     public void testReturningByte() throws Exception {
-        mTester.setByte((byte) 10);
-        assertEquals((byte) 10, mTester.callByteMethod());
+        mTester.setByte(Byte.MIN_VALUE);
+        assertEquals(Byte.MIN_VALUE, mTester.callByteMethod());
     }
 
     @Test
     public void testReturningChar() throws Exception {
-        mTester.setChar((char) 10);
-        assertEquals((char) 10, mTester.callCharMethod());
+        mTester.setChar(Character.MIN_VALUE);
+        assertEquals(Character.MIN_VALUE, mTester.callCharMethod());
+    }
+
+    @Test
+    public void testReturningShort() throws Exception {
+        mTester.setShort(Short.MIN_VALUE);
+        assertEquals(Short.MIN_VALUE, mTester.callShortMethod());
+    }
+
+    @Test
+    public void testReturningInt() throws Exception {
+        mTester.setInt(Integer.MIN_VALUE);
+        assertEquals(Integer.MIN_VALUE, mTester.callIntMethod());
+    }
+
+    @Test
+    public void testReturningLong() throws Exception {
+        mTester.setLong(Long.MIN_VALUE);
+        assertEquals(Long.MIN_VALUE, mTester.callLongMethod());
+    }
+
+    @Test
+    public void testReturningFloat() throws Exception {
+        mTester.setFloat(Float.MIN_VALUE);
+        assertTrue(Float.MIN_VALUE == mTester.callFloatMethod());
+    }
+
+    @Test
+    public void testReturningDouble() throws Exception {
+        mTester.setDouble(Double.MIN_VALUE);
+        assertTrue(Double.MIN_VALUE == mTester.callDoubleMethod());
     }
 }

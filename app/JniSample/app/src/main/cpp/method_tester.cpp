@@ -52,3 +52,54 @@ Java_org_coderoller_jnisample_testers_MethodTester_callCharMethodNative(JNIEnv *
     jpp::Object methodTesterObject(&methodTesterClass, obj);
     return methodTesterObject.call<jchar>("charMethod");
 }
+
+extern "C"
+JNIEXPORT jshort JNICALL
+Java_org_coderoller_jnisample_testers_MethodTester_callShortMethodNative(JNIEnv *env,
+                                                                         jobject obj) {
+
+    jpp::Class methodTesterClass(env, "org/coderoller/jnisample/testers/MethodTester");
+    jpp::Object methodTesterObject(&methodTesterClass, obj);
+    return methodTesterObject.call<jshort>("shortMethod");
+
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_org_coderoller_jnisample_testers_MethodTester_callIntMethodNative(JNIEnv *env,
+                                                                       jobject obj) {
+
+    jpp::Class methodTesterClass(env, "org/coderoller/jnisample/testers/MethodTester");
+    jpp::Object methodTesterObject(&methodTesterClass, obj);
+    return methodTesterObject.call<jint>("intMethod");
+}
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_org_coderoller_jnisample_testers_MethodTester_callLongMethodNative(JNIEnv *env,
+                                                                        jobject obj) {
+
+    jpp::Class methodTesterClass(env, "org/coderoller/jnisample/testers/MethodTester");
+    jpp::Object methodTesterObject(&methodTesterClass, obj);
+    return methodTesterObject.call<jlong>("longMethod");
+}
+
+extern "C"
+JNIEXPORT jfloat JNICALL
+Java_org_coderoller_jnisample_testers_MethodTester_callFloatMethodNative(JNIEnv *env,
+                                                                         jobject obj) {
+
+    jpp::Class methodTesterClass(env, "org/coderoller/jnisample/testers/MethodTester");
+    jpp::Object methodTesterObject(&methodTesterClass, obj);
+    return methodTesterObject.call<jfloat>("floatMethod");
+}
+
+extern "C"
+JNIEXPORT jdouble JNICALL
+Java_org_coderoller_jnisample_testers_MethodTester_callDoubleMethodNative(JNIEnv *env,
+                                                                          jobject obj) {
+
+    jpp::Class methodTesterClass(env, "org/coderoller/jnisample/testers/MethodTester");
+    jpp::Object methodTesterObject(&methodTesterClass, obj);
+    return methodTesterObject.call<jdouble>("doubleMethod");
+}
