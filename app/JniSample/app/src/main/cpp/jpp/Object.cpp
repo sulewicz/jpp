@@ -43,6 +43,19 @@ jobject Object::get_jobject() const {
     return m_jobject;
 }
 
+std::string Object::to_string() {
+    std::string ret;
+    if (m_class->get_class_name() == "java/lang/String") {
+        const char *native_string = get_env()->GetStringUTFChars((jstring) m_jobject, nullptr);
+        ret = native_string;
+        get_env()->ReleaseStringUTFChars((jstring) m_jobject, native_string);
+    } else {
+        Class string_class(get_env(), "java/lang/String");
+        ret = call_object("toString", string_class).to_string();
+    }
+    return ret;
+}
+
 template<class Ret>
 static inline Ret run_jni(Object *self, const char *method_name, const char *signature,
                           std::function<Ret(jmethodID)> jni_call) {
@@ -69,7 +82,7 @@ Object Object::vrun(Class &return_type, const char *method_name, const char *sig
     auto ret = run_jni<jobject>(this, method_name, signature, [&](jmethodID method_id) {
         return get_env()->CallObjectMethodV(m_jobject, method_id, vl);
     });
-    return Object(m_class, ret);
+    return Object(&return_type, ret);
 }
 
 void Object::vrun(const char *method_name, const char *signature, va_list vl) {

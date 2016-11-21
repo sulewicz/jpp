@@ -19,6 +19,8 @@ namespace jpp {
         jclass get_jclass() const;
         jobject get_jobject() const;
 
+        std::string to_string();
+
         template<class ... Types>
         Object call_object(const char *method_name, Class &return_type, Types ... args) {
             auto signature = utils::generate_signature(return_type, args...);

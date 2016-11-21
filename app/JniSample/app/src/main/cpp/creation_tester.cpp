@@ -6,7 +6,7 @@ JNIEXPORT jobject JNICALL
 Java_org_coderoller_jnisample_testers_CreationTester_createObjectNative(JNIEnv *env,
                                                                         jobject instance) {
 
-    jpp::Class integerClass(env, "java/lang/Integer");
-    auto integerObject = integerClass.construct(3);
-    return env->NewLocalRef(integerObject.get_jobject());
+    jpp::Class integer_class(env, "java/lang/Integer");
+    auto integer_object = integer_class.construct(3);
+    return env->NewLocalRef(integer_object.get_jobject());
 }

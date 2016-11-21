@@ -88,4 +88,16 @@ public class MethodUnitTest {
         mTester.setDouble(Double.MIN_VALUE);
         assertTrue(Double.MIN_VALUE == mTester.callDoubleMethod());
     }
+
+    @Test
+    public void testToString() throws Exception {
+        String testValue = "This is a test.";
+        mTester.setString(testValue);
+        assertEquals(testValue, mTester.callToString());
+    }
+
+    @Test
+    public void testGetClass() throws Exception {
+        assertTrue(mTester.callGetClass() == mTester.getClass());
+    }
 }

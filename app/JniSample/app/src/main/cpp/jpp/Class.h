@@ -1,6 +1,7 @@
 #pragma once
 
 #include <jni.h>
+#include <string>
 #include "internal/utils.h"
 #include "Object.h"
 
@@ -12,7 +13,7 @@ namespace jpp {
         ~Class();
 
         bool is_valid() const;
-        const char *get_class_name() const;
+        const std::string& get_class_name() const;
         JNIEnv *get_env() const;
         jclass get_jclass() const;
 
@@ -22,11 +23,14 @@ namespace jpp {
             return do_construct(signature.c_str(), args...);
         }
 
+        static Class resolve_class(JNIEnv *env, jobject object);
+
     private:
+        Class(JNIEnv *env, jclass _class, const char *class_name);
         Object do_construct(const char *signature, ...);
 
         JNIEnv *const m_env;
         jclass m_jclass = nullptr;
-        const char *m_class_name;
+        std::string m_class_name;
     };
 }

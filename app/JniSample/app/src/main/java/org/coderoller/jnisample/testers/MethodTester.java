@@ -15,6 +15,7 @@ public class MethodTester {
     private long mLong = 0;
     private float mFloat = 0;
     private double mDouble = 0;
+    private String mString = "";
 
     // Methods invoked from native layer.
 
@@ -58,6 +59,11 @@ public class MethodTester {
         return mDouble;
     }
 
+    @Override
+    public String toString() {
+        return mString;
+    }
+
     // Helper methods used by unit tests.
 
     public void setObject(Object o) {
@@ -94,6 +100,10 @@ public class MethodTester {
 
     public void setDouble(double d) {
         mDouble = d;
+    }
+
+    public void setString(String s) {
+        mString = s;
     }
 
     // Methods used for actual testing.
@@ -141,6 +151,14 @@ public class MethodTester {
         return callDoubleMethodNative();
     }
 
+    public String callToString() {
+        return callToStringNative();
+    }
+
+    public Class<?> callGetClass() {
+        return callGetClassNative();
+    }
+
     private native Object callObjectMethodNative();
 
     private native void callVoidMethodNative();
@@ -160,4 +178,8 @@ public class MethodTester {
     private native float callFloatMethodNative();
 
     private native double callDoubleMethodNative();
+
+    private native String callToStringNative();
+
+    private native Class<?> callGetClassNative();
 }
