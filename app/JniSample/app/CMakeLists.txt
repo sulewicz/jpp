@@ -20,6 +20,7 @@ add_library( # Sets the name of the library.
              # file are automatically included.
              src/main/cpp/creation_tester.cpp
              src/main/cpp/method_tester.cpp
+             src/main/cpp/static_method_tester.cpp
              src/main/cpp/jpp/Class.cpp
              src/main/cpp/jpp/Object.cpp
              src/main/cpp/jpp/internal/utils.cpp )

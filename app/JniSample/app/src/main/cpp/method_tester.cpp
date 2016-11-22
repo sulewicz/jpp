@@ -59,7 +59,6 @@ Java_org_coderoller_jnisample_testers_MethodTester_callShortMethodNative(JNIEnv 
     jpp::Class method_tester_class = jpp::Class::resolve_class(env, obj);
     jpp::Object method_tester_object(&method_tester_class, obj);
     return method_tester_object.call<jshort>("shortMethod");
-
 }
 
 extern "C"
