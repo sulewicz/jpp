@@ -15,8 +15,22 @@ public class StaticMethodTester {
     private static long sLong = 0;
     private static float sFloat = 0;
     private static double sDouble = 0;
+    private static String sString = null;
 
     // Methods invoked from native layer.
+
+    private static void multiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d, String str) {
+        sObject = o;
+        sBoolean = bool;
+        sByte = b;
+        sChar = c;
+        sShort = s;
+        sInt = i;
+        sLong = l;
+        sFloat = f;
+        sDouble = d;
+        sString = str;
+    }
 
     private static Object objectMethod() {
         return sObject;
@@ -73,43 +87,91 @@ public class StaticMethodTester {
         sDouble = 0;
     }
 
-    public static void setObject(Object o) {
-        sObject = o;
+    public static Object getObject() {
+        return sObject;
     }
 
-    public static void setBoolean(boolean b) {
-        sBoolean = b;
+    public static void setObject(Object object) {
+        sObject = object;
     }
 
-    public static void setByte(byte b) {
-        sByte = b;
+    public static boolean isBoolean() {
+        return sBoolean;
     }
 
-    public static void setChar(char c) {
-        sChar = c;
+    public static void setBoolean(boolean aBoolean) {
+        sBoolean = aBoolean;
     }
 
-    public static void setShort(short s) {
-        sShort = s;
+    public static byte getByte() {
+        return sByte;
     }
 
-    public static void setInt(int i) {
-        sInt = i;
+    public static void setByte(byte aByte) {
+        sByte = aByte;
     }
 
-    public static void setLong(long l) {
-        sLong = l;
+    public static char getChar() {
+        return sChar;
     }
 
-    public static void setFloat(float f) {
-        sFloat = f;
+    public static void setChar(char aChar) {
+        sChar = aChar;
     }
 
-    public static void setDouble(double d) {
-        sDouble = d;
+    public static short getShort() {
+        return sShort;
+    }
+
+    public static void setShort(short aShort) {
+        sShort = aShort;
+    }
+
+    public static int getInt() {
+        return sInt;
+    }
+
+    public static void setInt(int anInt) {
+        sInt = anInt;
+    }
+
+    public static long getLong() {
+        return sLong;
+    }
+
+    public static void setLong(long aLong) {
+        sLong = aLong;
+    }
+
+    public static float getFloat() {
+        return sFloat;
+    }
+
+    public static void setFloat(float aFloat) {
+        sFloat = aFloat;
+    }
+
+    public static double getDouble() {
+        return sDouble;
+    }
+
+    public static void setDouble(double aDouble) {
+        sDouble = aDouble;
+    }
+
+    public static String getString() {
+        return sString;
+    }
+
+    public static void setString(String string) {
+        sString = string;
     }
 
     // Methods used for actual testing.
+
+    public static void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d, String str) {
+        callMultiParamMethodNative(o, bool, b, c, s, i, l, f, d, str);
+    }
 
     public static Object callObjectMethod() {
         return callObjectMethodNative();
@@ -153,6 +215,9 @@ public class StaticMethodTester {
     public static double callDoubleMethod() {
         return callDoubleMethodNative();
     }
+
+    private static native void callMultiParamMethodNative(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d,
+                                                          String str);
 
     private static native Object callObjectMethodNative();
 

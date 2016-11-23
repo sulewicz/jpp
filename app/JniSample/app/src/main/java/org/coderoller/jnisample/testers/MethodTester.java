@@ -19,6 +19,19 @@ public class MethodTester {
 
     // Methods invoked from native layer.
 
+    private void multiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d, String str) {
+        mObject = o;
+        mBoolean = bool;
+        mByte = b;
+        mChar = c;
+        mShort = s;
+        mInt = i;
+        mLong = l;
+        mFloat = f;
+        mDouble = d;
+        mString = str;
+    }
+
     private Object objectMethod() {
         return mObject;
     }
@@ -66,47 +79,91 @@ public class MethodTester {
 
     // Helper methods used by unit tests.
 
-    public void setObject(Object o) {
-        mObject = o;
+    public Object getObject() {
+        return mObject;
     }
 
-    public void setBoolean(boolean b) {
-        mBoolean = b;
+    public void setObject(Object object) {
+        mObject = object;
     }
 
-    public void setByte(byte b) {
-        mByte = b;
+    public boolean isBoolean() {
+        return mBoolean;
     }
 
-    public void setChar(char c) {
-        mChar = c;
+    public void setBoolean(boolean aBoolean) {
+        mBoolean = aBoolean;
     }
 
-    public void setShort(short s) {
-        mShort = s;
+    public byte getByte() {
+        return mByte;
     }
 
-    public void setInt(int i) {
-        mInt = i;
+    public void setByte(byte aByte) {
+        mByte = aByte;
     }
 
-    public void setLong(long l) {
-        mLong = l;
+    public char getChar() {
+        return mChar;
     }
 
-    public void setFloat(float f) {
-        mFloat = f;
+    public void setChar(char aChar) {
+        mChar = aChar;
     }
 
-    public void setDouble(double d) {
-        mDouble = d;
+    public short getShort() {
+        return mShort;
     }
 
-    public void setString(String s) {
-        mString = s;
+    public void setShort(short aShort) {
+        mShort = aShort;
+    }
+
+    public int getInt() {
+        return mInt;
+    }
+
+    public void setInt(int anInt) {
+        mInt = anInt;
+    }
+
+    public long getLong() {
+        return mLong;
+    }
+
+    public void setLong(long aLong) {
+        mLong = aLong;
+    }
+
+    public float getFloat() {
+        return mFloat;
+    }
+
+    public void setFloat(float aFloat) {
+        mFloat = aFloat;
+    }
+
+    public double getDouble() {
+        return mDouble;
+    }
+
+    public void setDouble(double aDouble) {
+        mDouble = aDouble;
+    }
+
+    public String getString() {
+        return mString;
+    }
+
+    public void setString(String string) {
+        mString = string;
     }
 
     // Methods used for actual testing.
+
+    public void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d, String str) {
+        callMultiParamMethodNative(o, bool, b, c, s, i, l, f, d, str);
+    }
 
     public Object callObjectMethod() {
         return callObjectMethodNative();
@@ -158,6 +215,9 @@ public class MethodTester {
     public Class<?> callGetClass() {
         return callGetClassNative();
     }
+
+    private native void callMultiParamMethodNative(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d,
+                                                   String str);
 
     private native Object callObjectMethodNative();
 

@@ -28,6 +28,31 @@ public class MethodUnitTest {
     }
 
     @Test
+    public void testInvokingMultiParamMethod() throws Exception {
+        Object o = new Integer(3);
+        boolean bool = true;
+        byte b = (byte) 1;
+        char c = (char) 2;
+        short s = (short) 3;
+        int i = 4;
+        long l = (long) 5;
+        float f = (float) 6;
+        double d = (double) 7;
+        String str = "test";
+        mTester.callMultiParamMethod(o, bool, b, c, s, i, l, f, d, str);
+        assertEquals(o, mTester.getObject());
+        assertEquals(bool, mTester.isBoolean());
+        assertEquals(b, mTester.getByte());
+        assertEquals(c, mTester.getChar());
+        assertEquals(s, mTester.getShort());
+        assertEquals(i, mTester.getInt());
+        assertEquals(l, mTester.getLong());
+        assertTrue(f == mTester.getFloat());
+        assertTrue(d == mTester.getDouble());
+        assertEquals(str, mTester.getString());
+    }
+
+    @Test
     public void testReturningObject() throws Exception {
         Object o = new Integer(3);
         mTester.setObject(o);

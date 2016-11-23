@@ -33,4 +33,29 @@ public class CreationUnitTest {
         assertTrue(object instanceof Integer);
         assertEquals(3, ((Integer) object).intValue());
     }
+
+    @Test
+    public void testMultiParamConstructor() throws Exception {
+        Object o = new Integer(3);
+        boolean bool = true;
+        byte b = (byte) 1;
+        char c = (char) 2;
+        short s = (short) 3;
+        int i = 4;
+        long l = (long) 5;
+        float f = (float) 6;
+        double d = (double) 7;
+        String str = "test";
+        CreationTester.SimpleClass simpleClass = mTester.createSimpleClass(o, bool, b, c, s, i, l, f, d, str);
+        assertEquals(o, simpleClass.getObject());
+        assertEquals(bool, simpleClass.isBoolean());
+        assertEquals(b, simpleClass.getByte());
+        assertEquals(c, simpleClass.getChar());
+        assertEquals(s, simpleClass.getShort());
+        assertEquals(i, simpleClass.getInt());
+        assertEquals(l, simpleClass.getLong());
+        assertTrue(f == simpleClass.getFloat());
+        assertTrue(d == simpleClass.getDouble());
+        assertEquals(str, simpleClass.getString());
+    }
 }

@@ -14,18 +14,18 @@ namespace jpp {
         ~Class();
 
         bool is_valid() const;
-        const std::string& get_class_name() const;
+        const std::string &get_class_name() const;
         JNIEnv *get_env() const;
         jclass get_jclass() const;
 
-        template<class ... Types>
-        Object construct(Types ... args) {
-            auto signature = utils::generate_signature((void*)0, args...);
-            return do_construct(signature.c_str(), args...);
-        }
-
         static Class resolve_class(JNIEnv *env, jobject object);
-        static std::string resolve_class_name(JNIEnv *env, Object& class_object);
+        static std::string resolve_class_name(JNIEnv *env, Object &class_object);
+
+        template<class ... Types>
+        Object create(Types ... args) {
+            auto signature = utils::generate_signature((void *) 0, args...);
+            return do_create(signature.c_str(), utils::flatten(args)...);
+        }
 
         template<class ... Types>
         Object call_object(const char *method_name, Class &return_type, Types ... args) {
@@ -35,7 +35,7 @@ namespace jpp {
 
         template<class ... Types>
         void call_void(const char *method_name, Types ... args) {
-            auto signature = utils::generate_signature((void*)0, args...);
+            auto signature = utils::generate_signature((void *) 0, args...);
             run_void(method_name, signature.c_str(), utils::flatten(args)...);
         }
 
@@ -47,12 +47,21 @@ namespace jpp {
 
     private:
         Class(JNIEnv *env, jclass _class, const char *class_name);
-        Object do_construct(const char *signature, ...);
 
-        inline Object run_object(Class &return_type, const char *method_name, const char *signature, ...) {
+        inline Object do_create(const char *signature,
+                                 ...) {
             va_list vl;
             va_start(vl, signature);
-            auto ret = vrun(return_type, method_name, signature, vl);
+            auto ret = do_create_v(signature, vl);
+            va_end(vl);
+            return ret;
+        }
+
+        inline Object run_object(Class &return_type, const char *method_name, const char *signature,
+                                 ...) {
+            va_list vl;
+            va_start(vl, signature);
+            auto ret = run_v(return_type, method_name, signature, vl);
             va_end(vl);
             return ret;
         }
@@ -60,7 +69,7 @@ namespace jpp {
         inline void run_void(const char *method_name, const char *signature, ...) {
             va_list vl;
             va_start(vl, signature);
-            vrun(method_name, signature, vl);
+            run_v(method_name, signature, vl);
             va_end(vl);
         }
 
@@ -68,15 +77,16 @@ namespace jpp {
         inline Ret run(Ret type, const char *method_name, const char *signature, ...) {
             va_list vl;
             va_start(vl, signature);
-            auto ret = vrun(type, method_name, signature, vl);
+            auto ret = run_v(type, method_name, signature, vl);
             va_end(vl);
             return ret;
         }
 
-        Object vrun(Class &return_type, const char *method_name, const char *signature, va_list vl);
-        void vrun(const char *method_name, const char *signature, va_list vl);
+        Object do_create_v(const char *signature, va_list vl);
+        Object run_v(Class &return_type, const char *method_name, const char *signature, va_list vl);
+        void run_v(const char *method_name, const char *signature, va_list vl);
         template<class Ret>
-        Ret vrun(Ret, const char *method_name, const char *signature, va_list vl);
+        Ret run_v(Ret, const char *method_name, const char *signature, va_list vl);
 
         JNIEnv *const m_env;
         jclass m_jclass = nullptr;

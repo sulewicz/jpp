@@ -43,7 +43,7 @@ namespace jpp {
         inline Object run_object(Class &return_type, const char *method_name, const char *signature, ...) {
             va_list vl;
             va_start(vl, signature);
-            auto ret = vrun(return_type, method_name, signature, vl);
+            auto ret = run_v(return_type, method_name, signature, vl);
             va_end(vl);
             return ret;
         }
@@ -51,7 +51,7 @@ namespace jpp {
         inline void run_void(const char *method_name, const char *signature, ...) {
             va_list vl;
             va_start(vl, signature);
-            vrun(method_name, signature, vl);
+            run_v(method_name, signature, vl);
             va_end(vl);
         }
 
@@ -59,15 +59,15 @@ namespace jpp {
         inline Ret run(Ret type, const char *method_name, const char *signature, ...) {
             va_list vl;
             va_start(vl, signature);
-            auto ret = vrun(type, method_name, signature, vl);
+            auto ret = run_v(type, method_name, signature, vl);
             va_end(vl);
             return ret;
         }
 
-        Object vrun(Class &return_type, const char *method_name, const char *signature, va_list vl);
-        void vrun(const char *method_name, const char *signature, va_list vl);
+        Object run_v(Class &return_type, const char *method_name, const char *signature, va_list vl);
+        void run_v(const char *method_name, const char *signature, va_list vl);
         template<class Ret>
-        Ret vrun(Ret, const char *method_name, const char *signature, va_list vl);
+        Ret run_v(Ret, const char *method_name, const char *signature, va_list vl);
 
 
         Class *const m_class;

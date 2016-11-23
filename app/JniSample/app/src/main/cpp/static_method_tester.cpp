@@ -2,6 +2,26 @@
 #include "jpp/jpp.h"
 
 extern "C"
+JNIEXPORT void JNICALL
+Java_org_coderoller_jnisample_testers_StaticMethodTester_callMultiParamMethodNative(JNIEnv *env,
+                                                                                    jclass type,
+                                                                                    jobject o,
+                                                                                    jboolean boolean,
+                                                                                    jbyte b,
+                                                                                    jchar c,
+                                                                                    jshort s,
+                                                                                    jint i, jlong l,
+                                                                                    jfloat f,
+                                                                                    jdouble d,
+                                                                                    jstring str) {
+    jpp::Class class_object(env, type);
+    jpp::Class object_class(env, "java/lang/Object");
+    jpp::Class string_class(env, "java/lang/String");
+    class_object.call_void("multiParamMethod", jpp::Object(&object_class, o), boolean, b, c,
+                           s, i, l, f, d, jpp::Object(&string_class, str));
+}
+
+extern "C"
 JNIEXPORT jobject JNICALL
 Java_org_coderoller_jnisample_testers_StaticMethodTester_callObjectMethodNative(JNIEnv *env,
                                                                                 jclass type) {

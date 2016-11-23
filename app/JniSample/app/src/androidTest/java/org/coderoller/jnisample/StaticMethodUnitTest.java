@@ -21,6 +21,31 @@ public class StaticMethodUnitTest {
     }
 
     @Test
+    public void testInvokingMultiParamMethod() throws Exception {
+        Object o = new Integer(3);
+        boolean bool = true;
+        byte b = (byte) 1;
+        char c = (char) 2;
+        short s = (short) 3;
+        int i = 4;
+        long l = (long) 5;
+        float f = (float) 6;
+        double d = (double) 7;
+        String str = "test";
+        StaticMethodTester.callMultiParamMethod(o, bool, b, c, s, i, l, f, d, str);
+        assertEquals(o, StaticMethodTester.getObject());
+        assertEquals(bool, StaticMethodTester.isBoolean());
+        assertEquals(b, StaticMethodTester.getByte());
+        assertEquals(c, StaticMethodTester.getChar());
+        assertEquals(s, StaticMethodTester.getShort());
+        assertEquals(i, StaticMethodTester.getInt());
+        assertEquals(l, StaticMethodTester.getLong());
+        assertTrue(f == StaticMethodTester.getFloat());
+        assertTrue(d == StaticMethodTester.getDouble());
+        assertEquals(str, StaticMethodTester.getString());
+    }
+
+    @Test
     public void testReturningObject() throws Exception {
         Object o = new Integer(3);
         StaticMethodTester.setObject(o);
