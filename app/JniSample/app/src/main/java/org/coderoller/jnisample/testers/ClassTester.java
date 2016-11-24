@@ -1,6 +1,6 @@
 package org.coderoller.jnisample.testers;
 
-public class CreationTester {
+public class ClassTester {
     static {
         System.loadLibrary("native-lib");
     }

@@ -2,7 +2,7 @@ package org.coderoller.jnisample;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import org.coderoller.jnisample.testers.CreationTester;
+import org.coderoller.jnisample.testers.ClassTester;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,12 +13,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class CreationUnitTest {
-    private CreationTester mTester;
+public class ClassUnitTest {
+    private ClassTester mTester;
 
     @Before
     public void setUp() {
-        mTester = new CreationTester();
+        mTester = new ClassTester();
     }
 
     @After
@@ -46,7 +46,7 @@ public class CreationUnitTest {
         float f = (float) 6;
         double d = (double) 7;
         String str = "test";
-        CreationTester.SimpleClass simpleClass = mTester.createSimpleClass(o, bool, b, c, s, i, l, f, d, str);
+        ClassTester.SimpleClass simpleClass = mTester.createSimpleClass(o, bool, b, c, s, i, l, f, d, str);
         assertEquals(o, simpleClass.getObject());
         assertEquals(bool, simpleClass.isBoolean());
         assertEquals(b, simpleClass.getByte());

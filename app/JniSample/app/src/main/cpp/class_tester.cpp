@@ -3,7 +3,7 @@
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_org_coderoller_jnisample_testers_CreationTester_createObjectNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_ClassTester_createObjectNative(JNIEnv *env,
                                                                         jobject instance) {
 
     jpp::Class integer_class(env, "java/lang/Integer");
@@ -13,7 +13,7 @@ Java_org_coderoller_jnisample_testers_CreationTester_createObjectNative(JNIEnv *
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_org_coderoller_jnisample_testers_CreationTester_createSimpleClassNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_ClassTester_createSimpleClassNative(JNIEnv *env,
                                                                              jobject instance,
                                                                              jobject o,
                                                                              jboolean boolean,
@@ -22,7 +22,7 @@ Java_org_coderoller_jnisample_testers_CreationTester_createSimpleClassNative(JNI
                                                                              jint i, jlong l,
                                                                              jfloat f, jdouble d,
                                                                              jstring str) {
-    jpp::Class simple_class_class(env, "org/coderoller/jnisample/testers/CreationTester$SimpleClass");
+    jpp::Class simple_class_class(env, "org/coderoller/jnisample/testers/ClassTester$SimpleClass");
     jpp::Class object_class(env, "java/lang/Object");
     jpp::Class string_class(env, "java/lang/String");
     auto ret = simple_class_class.create(jpp::Object(&object_class, o),
