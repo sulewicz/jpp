@@ -8,8 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.Serializable;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -57,5 +61,22 @@ public class ClassUnitTest {
         assertTrue(f == simpleClass.getFloat());
         assertTrue(d == simpleClass.getDouble());
         assertEquals(str, simpleClass.getString());
+    }
+
+    @Test
+    public void testSuperclassMethod() {
+        assertEquals(Number.class, mTester.getSuperclass(Integer.class));
+        assertNull(mTester.getSuperclass(null));
+        assertNull(mTester.getSuperclass(Object.class));
+        assertNull(mTester.getSuperclass(Serializable.class));
+    }
+
+    @Test
+    public void testAssignableFromMethod() {
+        assertTrue(mTester.checkAssignability(Number.class, Number.class));
+        assertTrue(mTester.checkAssignability(Integer.class, Number.class));
+        assertFalse(mTester.checkAssignability(Number.class, Integer.class));
+        assertFalse(mTester.checkAssignability(null, Object.class));
+        assertFalse(mTester.checkAssignability(Object.class, null));
     }
 }

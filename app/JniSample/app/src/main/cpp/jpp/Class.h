@@ -8,6 +8,7 @@
 namespace jpp {
     class Class {
     public:
+        Class(JNIEnv *env);
         Class(JNIEnv *env, const char *class_name);
         Class(JNIEnv *env, jclass _class);
         Class(const Class &other);
@@ -17,6 +18,9 @@ namespace jpp {
         const std::string &get_class_name() const;
         JNIEnv *get_env() const;
         jclass get_jclass() const;
+
+        Class get_super_class();
+        bool is_assignable_from(Class& from_class);
 
         static Class resolve_class(JNIEnv *env, jobject object);
         static std::string resolve_class_name(JNIEnv *env, Object &class_object);

@@ -13,10 +13,22 @@ public class ClassTester {
         return createSimpleClassNative(o, bool, b, c, s, i, l, f, d, str);
     }
 
+    public Class<?> getSuperclass(Class<?> _class) {
+        return getSuperclassNative(_class);
+    }
+
+    public boolean checkAssignability(Class<?> from, Class<?> to) {
+        return checkAssignabilityNative(from, to);
+    }
+
     private native Object createObjectNative();
 
     private native SimpleClass createSimpleClassNative(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d,
                                                        String str);
+
+    private native Class<?> getSuperclassNative(Class<?> _class);
+
+    private native boolean checkAssignabilityNative(Class<?> from, Class<?> to);
 
     public static class SimpleClass {
         private Object mObject = null;

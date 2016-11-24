@@ -4,10 +4,15 @@
 
 using namespace jpp;
 
+Class::Class(JNIEnv *env) : m_env(env) {
+}
+
 Class::Class(JNIEnv *env, const char *class_name) : m_env(env), m_class_name(class_name) {
-    jclass _class = m_env->FindClass(m_class_name.c_str());
-    if (_class != nullptr) {
-        m_jclass = (jclass) m_env->NewGlobalRef(_class);
+    if (class_name != nullptr) {
+        jclass _class = m_env->FindClass(m_class_name.c_str());
+        if (_class != nullptr) {
+            m_jclass = (jclass) m_env->NewGlobalRef(_class);
+        }
     }
 }
 
@@ -54,6 +59,21 @@ JNIEnv *Class::get_env() const {
 
 jclass Class::get_jclass() const {
     return m_jclass;
+}
+
+Class Class::get_super_class() {
+    if (is_valid()) {
+        return Class(m_env, m_env->GetSuperclass(m_jclass));
+    } else {
+        return Class(m_env);
+    }
+}
+
+bool Class::is_assignable_from(Class &from_class) {
+    if (is_valid() && from_class.is_valid()) {
+        return m_env->IsAssignableFrom(from_class.get_jclass(), m_jclass);
+    }
+    return false;
 }
 
 Class Class::resolve_class(JNIEnv *env, jobject object) {
