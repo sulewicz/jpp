@@ -15,11 +15,10 @@ public class StaticMethodTester {
     private static long sLong = 0;
     private static float sFloat = 0;
     private static double sDouble = 0;
-    private static String sString = null;
 
     // Methods invoked from native layer.
 
-    private static void multiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d, String str) {
+    private static void multiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d) {
         sObject = o;
         sBoolean = bool;
         sByte = b;
@@ -29,7 +28,6 @@ public class StaticMethodTester {
         sLong = l;
         sFloat = f;
         sDouble = d;
-        sString = str;
     }
 
     private static Object objectMethod() {
@@ -159,18 +157,10 @@ public class StaticMethodTester {
         sDouble = aDouble;
     }
 
-    public static String getString() {
-        return sString;
-    }
-
-    public static void setString(String string) {
-        sString = string;
-    }
-
     // Methods used for actual testing.
 
-    public static void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d, String str) {
-        callMultiParamMethodNative(o, bool, b, c, s, i, l, f, d, str);
+    public static void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d) {
+        callMultiParamMethodNative(o, bool, b, c, s, i, l, f, d);
     }
 
     public static Object callObjectMethod() {
@@ -216,8 +206,8 @@ public class StaticMethodTester {
         return callDoubleMethodNative();
     }
 
-    private static native void callMultiParamMethodNative(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d,
-                                                          String str);
+    private static native void callMultiParamMethodNative(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double
+            d);
 
     private static native Object callObjectMethodNative();
 

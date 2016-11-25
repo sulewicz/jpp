@@ -31,8 +31,7 @@ public class StaticMethodUnitTest {
         long l = (long) 5;
         float f = (float) 6;
         double d = (double) 7;
-        String str = "test";
-        StaticMethodTester.callMultiParamMethod(o, bool, b, c, s, i, l, f, d, str);
+        StaticMethodTester.callMultiParamMethod(o, bool, b, c, s, i, l, f, d);
         assertEquals(o, StaticMethodTester.getObject());
         assertEquals(bool, StaticMethodTester.isBoolean());
         assertEquals(b, StaticMethodTester.getByte());
@@ -42,7 +41,6 @@ public class StaticMethodUnitTest {
         assertEquals(l, StaticMethodTester.getLong());
         assertTrue(f == StaticMethodTester.getFloat());
         assertTrue(d == StaticMethodTester.getDouble());
-        assertEquals(str, StaticMethodTester.getString());
     }
 
     @Test

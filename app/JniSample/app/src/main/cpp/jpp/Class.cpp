@@ -1,54 +1,39 @@
 #include "Class.h"
-#include <algorithm>
+#include "Env.h"
+#include "Object.h"
+#include "Array.h"
 
 using namespace jpp;
 
-Class::Class(JNIEnv *env) : m_env(env) {
+Class::Class(Env *env) : m_env(env) {
 }
 
-Class::Class(JNIEnv *env, const char *class_name) : m_env(env), m_class_name(class_name) {
-    if (class_name != nullptr) {
-        jclass _class = m_env->FindClass(m_class_name.c_str());
-        if (_class != nullptr) {
-            m_jclass = (jclass) m_env->NewGlobalRef(_class);
-        }
-    }
-}
-
-Class::Class(JNIEnv *env, jclass _class) : m_env(env) {
+Class::Class(Env *env, jclass _class, const char *class_name) : m_env(env) {
     if (_class != nullptr) {
-        m_jclass = (jclass) m_env->NewGlobalRef(_class);
-        Class class_class(env, "java/lang/Class");
-        Object class_object(&class_class, m_jclass);
-        m_class_name = resolve_class_name(env, class_object);
+        m_jclass = _class;
+        m_class_name = class_name;
     }
 }
 
-Class::Class(const Class &other) : m_env(other.m_env), m_class_name(other.m_class_name) {
-    if (other.is_valid()) {
-        m_jclass = (jclass) m_env->NewGlobalRef(other.m_jclass);
-    }
+Class::Class(const Class &other) : m_env(other.m_env), m_jclass(other.m_jclass),
+                                   m_class_name(other.m_class_name) {
 }
 
-Class::Class(JNIEnv *env, jclass _class, const char *class_name) : m_env(env),
-                                                                   m_class_name(class_name) {
-    if (_class != nullptr) {
-        m_jclass = (jclass) m_env->NewGlobalRef(_class);
-    }
+Class &Class::operator=(const Class &other) {
+    m_env = other.m_env;
+    m_jclass = other.m_jclass;
+    m_class_name = other.m_class_name;
+    return *this;
 }
 
 Class::~Class() {
-    if (is_valid()) {
-        m_env->DeleteGlobalRef(m_jclass);
-        m_jclass = nullptr;
-    }
 }
 
 bool Class::is_valid() const {
     return m_jclass != nullptr;
 }
 
-const std::string &Class::get_class_name() const {
+const char *Class::get_class_name() const {
     return m_class_name;
 }
 
@@ -60,7 +45,7 @@ std::string Class::get_signature_name() const {
     }
 }
 
-JNIEnv *Class::get_env() const {
+Env *Class::get_env() const {
     return m_env;
 }
 
@@ -69,16 +54,12 @@ jclass Class::get_jclass() const {
 }
 
 Class Class::get_super_class() {
-    if (is_valid()) {
-        return Class(m_env, m_env->GetSuperclass(m_jclass));
-    } else {
-        return Class(m_env);
-    }
+    return m_env->get_superclass(*this);
 }
 
 bool Class::is_assignable_from(Class &from_class) {
     if (is_valid() && from_class.is_valid()) {
-        return m_env->IsAssignableFrom(from_class.get_jclass(), m_jclass);
+        return m_env->get_jenv()->IsAssignableFrom(from_class.get_jclass(), m_jclass);
     }
     return false;
 }
@@ -91,68 +72,80 @@ bool Class::is_array_class() const {
     return m_jclass != nullptr && m_class_name[0] == '[';
 }
 
-Class Class::resolve_class(JNIEnv *env, jobject object) {
-    Class class_class(env, "java/lang/Class");
-    Class object_class(env, "java/lang/Object");
-    Object object_instance(&object_class, object);
-
-    // Retrieving class object
-    Object class_object = object_instance.call_object("getClass", class_class);
-    // Retrieving class name
-    auto class_name = resolve_class_name(env, class_object);
-
-    return Class(env, (jclass) class_object.get_jobject(), class_name.c_str());
+Object Class::do_create(const char *signature,
+                        ...) {
+    va_list vl;
+    va_start(vl, signature);
+    auto ret = do_create_v(signature, vl);
+    va_end(vl);
+    return ret;
 }
 
-std::string Class::resolve_class_name(JNIEnv *env, Object &class_object) {
-    Class string_class(env, "java/lang/String");
-    Object class_name_object = class_object.call_object("getName", string_class);
+Object Class::run_object(Class &return_type, const char *method_name, const char *signature,
+                         ...) {
+    va_list vl;
+    va_start(vl, signature);
+    auto&& ret = run_v(return_type, method_name, signature, vl);
+    va_end(vl);
+    return ret;
+}
 
-    std::string class_name = class_name_object.to_string();
-    std::replace(class_name.begin(), class_name.end(), '.', '/');
-    return class_name;
+void Class::run_void(const char *method_name, const char *signature, ...) {
+    va_list vl;
+    va_start(vl, signature);
+    run_v(method_name, signature, vl);
+    va_end(vl);
+}
+
+jarray Class::do_create_array(size_t size) {
+    return common::new_array(m_env->get_jenv(), m_jclass, m_class_name, size);
 }
 
 Object Class::do_create_v(const char *signature, va_list vl) {
     if (is_object_class()) {
-        auto ret = common::invoke_method<jobject>(get_env(), get_jclass(), "<init>", signature,
+        auto jenv = m_env->get_jenv();
+        auto ret = common::invoke_method<jobject>(jenv, get_jclass(), "<init>", signature,
                                                   [&](jmethodID method_id) {
-                                                      return get_env()->NewObjectV(get_jclass(),
-                                                                                   method_id,
-                                                                                   vl);
+                                                      return jenv->NewObjectV(get_jclass(),
+                                                                              method_id,
+                                                                              vl);
                                                   });
-        return Object(this, ret);
+        return m_env->wrap(*this, ret);
     } else {
-        return Object(this);
+        return m_env->wrap(*this, nullptr);
     }
 }
 
 Object Class::run_v(Class &return_type, const char *method_name, const char *signature,
                     va_list vl) {
-    auto ret = common::invoke_static_method<jobject>(get_env(), get_jclass(), method_name,
+    auto jenv = m_env->get_jenv();
+    auto ret = common::invoke_static_method<jobject>(jenv, get_jclass(), method_name,
                                                      signature,
                                                      [&](jmethodID method_id) {
-                                                         return get_env()->CallStaticObjectMethodV(
+                                                         return m_env->get_jenv()->CallStaticObjectMethodV(
                                                                  get_jclass(),
                                                                  method_id,
                                                                  vl);
                                                      });
-    return Object(&return_type, ret);
+    return m_env->wrap(return_type, ret);
 }
 
 void Class::run_v(const char *method_name, const char *signature, va_list vl) {
-    common::invoke_static_method<void>(get_env(), get_jclass(), method_name, signature,
+    auto jenv = m_env->get_jenv();
+    common::invoke_static_method<void>(jenv, get_jclass(), method_name, signature,
                                        [&](jmethodID method_id) {
-                                           get_env()->CallStaticVoidMethodV(get_jclass(), method_id,
-                                                                            vl);
+                                           m_env->get_jenv()->CallStaticVoidMethodV(get_jclass(),
+                                                                                   method_id,
+                                                                                   vl);
                                        });
 }
 
 template<>
 jboolean Class::run_v(jboolean, const char *method_name, const char *signature, va_list vl) {
-    return common::invoke_static_method<jboolean>(get_env(), get_jclass(), method_name, signature,
+    auto jenv = m_env->get_jenv();
+    return common::invoke_static_method<jboolean>(jenv, get_jclass(), method_name, signature,
                                                   [&](jmethodID method_id) {
-                                                      return get_env()->CallStaticBooleanMethodV(
+                                                      return m_env->get_jenv()->CallStaticBooleanMethodV(
                                                               get_jclass(),
                                                               method_id,
                                                               vl);
@@ -161,9 +154,10 @@ jboolean Class::run_v(jboolean, const char *method_name, const char *signature, 
 
 template<>
 jbyte Class::run_v(jbyte, const char *method_name, const char *signature, va_list vl) {
-    return common::invoke_static_method<jbyte>(get_env(), get_jclass(), method_name, signature,
+    auto jenv = m_env->get_jenv();
+    return common::invoke_static_method<jbyte>(jenv, get_jclass(), method_name, signature,
                                                [&](jmethodID method_id) {
-                                                   return get_env()->CallStaticByteMethodV(
+                                                   return m_env->get_jenv()->CallStaticByteMethodV(
                                                            get_jclass(),
                                                            method_id, vl);
                                                });
@@ -171,9 +165,10 @@ jbyte Class::run_v(jbyte, const char *method_name, const char *signature, va_lis
 
 template<>
 jchar Class::run_v(jchar, const char *method_name, const char *signature, va_list vl) {
-    return common::invoke_static_method<jchar>(get_env(), get_jclass(), method_name, signature,
+    auto jenv = m_env->get_jenv();
+    return common::invoke_static_method<jchar>(jenv, get_jclass(), method_name, signature,
                                                [&](jmethodID method_id) {
-                                                   return get_env()->CallStaticCharMethodV(
+                                                   return jenv->CallStaticCharMethodV(
                                                            get_jclass(),
                                                            method_id, vl);
                                                });
@@ -181,9 +176,10 @@ jchar Class::run_v(jchar, const char *method_name, const char *signature, va_lis
 
 template<>
 jshort Class::run_v(jshort, const char *method_name, const char *signature, va_list vl) {
-    return common::invoke_static_method<jshort>(get_env(), get_jclass(), method_name, signature,
+    auto jenv = m_env->get_jenv();
+    return common::invoke_static_method<jshort>(jenv, get_jclass(), method_name, signature,
                                                 [&](jmethodID method_id) {
-                                                    return get_env()->CallStaticShortMethodV(
+                                                    return m_env->get_jenv()->CallStaticShortMethodV(
                                                             get_jclass(),
                                                             method_id, vl);
                                                 });
@@ -191,9 +187,10 @@ jshort Class::run_v(jshort, const char *method_name, const char *signature, va_l
 
 template<>
 jint Class::run_v(jint, const char *method_name, const char *signature, va_list vl) {
-    return common::invoke_static_method<jint>(get_env(), get_jclass(), method_name, signature,
+    auto jenv = m_env->get_jenv();
+    return common::invoke_static_method<jint>(jenv, get_jclass(), method_name, signature,
                                               [&](jmethodID method_id) {
-                                                  return get_env()->CallStaticIntMethodV(
+                                                  return jenv->CallStaticIntMethodV(
                                                           get_jclass(),
                                                           method_id, vl);
                                               });
@@ -201,9 +198,10 @@ jint Class::run_v(jint, const char *method_name, const char *signature, va_list 
 
 template<>
 jlong Class::run_v(jlong, const char *method_name, const char *signature, va_list vl) {
-    return common::invoke_static_method<jlong>(get_env(), get_jclass(), method_name, signature,
+    auto jenv = m_env->get_jenv();
+    return common::invoke_static_method<jlong>(jenv, get_jclass(), method_name, signature,
                                                [&](jmethodID method_id) {
-                                                   return get_env()->CallStaticLongMethodV(
+                                                   return jenv->CallStaticLongMethodV(
                                                            get_jclass(),
                                                            method_id, vl);
                                                });
@@ -211,9 +209,10 @@ jlong Class::run_v(jlong, const char *method_name, const char *signature, va_lis
 
 template<>
 jfloat Class::run_v(jfloat, const char *method_name, const char *signature, va_list vl) {
-    return common::invoke_static_method<jfloat>(get_env(), get_jclass(), method_name, signature,
+    auto jenv = m_env->get_jenv();
+    return common::invoke_static_method<jfloat>(jenv, get_jclass(), method_name, signature,
                                                 [&](jmethodID method_id) {
-                                                    return get_env()->CallStaticFloatMethodV(
+                                                    return jenv->CallStaticFloatMethodV(
                                                             get_jclass(),
                                                             method_id, vl);
                                                 });
@@ -221,9 +220,10 @@ jfloat Class::run_v(jfloat, const char *method_name, const char *signature, va_l
 
 template<>
 jdouble Class::run_v(jdouble, const char *method_name, const char *signature, va_list vl) {
-    return common::invoke_static_method<jdouble>(get_env(), get_jclass(), method_name, signature,
+    auto jenv = m_env->get_jenv();
+    return common::invoke_static_method<jdouble>(jenv, get_jclass(), method_name, signature,
                                                  [&](jmethodID method_id) {
-                                                     return get_env()->CallStaticDoubleMethodV(
+                                                     return jenv->CallStaticDoubleMethodV(
                                                              get_jclass(),
                                                              method_id,
                                                              vl);

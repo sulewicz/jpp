@@ -1,13 +1,13 @@
 #include "Array.h"
-#include "Class.h"
+#include "Env.h"
 
 using namespace jpp;
 
-AbstractArray::AbstractArray(Class *_class) : Object(_class) {
+AbstractArray::AbstractArray(Class &_class) : Object(_class) {
 
 }
 
-AbstractArray::AbstractArray(Class *_class, jarray array) : Object(_class, (jobject) array) {
+AbstractArray::AbstractArray(Class &_class, jarray array) : Object(_class, (jobject) array) {
 
 }
 
@@ -25,7 +25,7 @@ jarray AbstractArray::get_jarray() const {
 
 size_t AbstractArray::get_length() const {
     if (is_valid()) {
-        return get_env()->GetArrayLength(get_jarray());
+        return get_env()->get_jenv()->GetArrayLength(get_jarray());
     } else {
         return 0;
     }
@@ -33,26 +33,25 @@ size_t AbstractArray::get_length() const {
 
 template<>
 Object Array<Object>::get(size_t index) {
-    // TODO: THIS IS BAD, INTRODUCE CLASS CACHE ASAP (via JniEnv)
-    // Keep item class in Array
-    auto item = get_env()->GetObjectArrayElement((jobjectArray) get_jarray(), index);
-    auto item_class = Class::resolve_class(get_env(), item);
-    return Object(&item_class, item);
+    auto item = get_env()->get_jenv()->GetObjectArrayElement((jobjectArray) get_jarray(), index);
+    auto item_object = get_env()->wrap(item);
+    return item_object;
 }
 
 template<>
 void Array<Object>::set(size_t index, Object &item) {
-    get_env()->SetObjectArrayElement((jobjectArray) get_jarray(), index, item.get_jobject());
+    get_env()->get_jenv()->SetObjectArrayElement((jobjectArray) get_jarray(), index,
+                                                 item.get_jobject());
 }
 
 template<>
 jbyte Array<jbyte>::get(size_t index) {
     jbyte ret;
-    get_env()->GetByteArrayRegion((jbyteArray) get_jarray(), index, 1, &ret);
+    get_env()->get_jenv()->GetByteArrayRegion((jbyteArray) get_jarray(), index, 1, &ret);
     return ret;
 }
 
 template<>
 void Array<jbyte>::set(size_t index, jbyte &item) {
-    get_env()->SetByteArrayRegion((jbyteArray) get_jarray(), index, 1, &item);
+    get_env()->get_jenv()->SetByteArrayRegion((jbyteArray) get_jarray(), index, 1, &item);
 }

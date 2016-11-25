@@ -4,23 +4,21 @@
 #include "internal/common.h"
 
 namespace jpp {
+    class Env;
     class Class;
 
     class Object {
     public:
-        Object(Class *_class);
-        Object(Class *_class, jobject object);
         Object(const Object &other);
+        Object(Object &&other);
         ~Object();
 
         bool is_valid() const;
 
-        Class *get_class() const;
-        JNIEnv *get_env() const;
+        Class &get_class();
+        Env *get_env() const;
         jclass get_jclass() const;
         jobject get_jobject() const;
-
-        std::string to_string();
 
         template<class ... Types>
         Object call_object(const char *method_name, Class &return_type, Types ... args) {
@@ -39,6 +37,10 @@ namespace jpp {
             auto signature = common::generate_signature(Ret(), args...);
             return run(Ret(), method_name, signature.c_str(), type::flatten(args)...);
         }
+
+    protected:
+        Object(Class &_class);
+        Object(Class &_class, jobject object);
 
     private:
         inline Object run_object(Class &return_type, const char *method_name, const char *signature,
@@ -73,7 +75,8 @@ namespace jpp {
         Ret run_v(Ret, const char *method_name, const char *signature, va_list vl);
 
 
-        Class *const m_class;
+        Class *m_class = nullptr;
         jobject m_jobject = nullptr;
+        friend class Env;
     };
 }

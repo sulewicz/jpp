@@ -1,5 +1,7 @@
 #include "type.h"
 #include "../Class.h"
+#include "../Object.h"
+#include "../Array.h"
 
 jboolean jpp::type::flatten(jboolean &arg) {
     return arg;
@@ -90,11 +92,11 @@ std::string jpp::type::type_to_str(jstring &) {
 }
 
 std::string jpp::type::type_to_str(Object &object) {
-    return type_to_str(*object.get_class());
+    return type_to_str(object.get_class());
 }
 
 std::string jpp::type::type_to_str(AbstractArray &array) {
-    return type_to_str(*array.get_class());
+    return type_to_str(array.get_class());
 }
 
 std::string jpp::type::type_to_str(Class &_class) {

@@ -6,7 +6,8 @@ JNIEXPORT jobjectArray JNICALL
 Java_org_coderoller_jnisample_testers_ArrayTester_createObjectArrayNative(JNIEnv *env,
                                                                           jobject instance,
                                                                           jint size) {
-    jpp::Class array_class(env, "[Ljava/lang/Object;");
+    jpp::Env jpp_env(env);
+    jpp::Class array_class = jpp_env.find_class("[Ljava/lang/Object;");
     auto array_object = array_class.create_array<jpp::Object>(size);
     return (jobjectArray) env->NewLocalRef(array_object.get_jarray());
 }
@@ -15,8 +16,8 @@ extern "C"
 JNIEXPORT jint JNICALL
 Java_org_coderoller_jnisample_testers_ArrayTester_getObjectLengthNative(
         JNIEnv *env, jobject instance, jobjectArray array) {
-    jpp::Class array_class = jpp::Class::resolve_class(env, array);
-    jpp::Array<jpp::Object> array_object(&array_class, array);
+    jpp::Env jpp_env(env);
+    jpp::Array<jpp::Object> array_object = jpp_env.wrap(array);
     return array_object.get_length();
 }
 
@@ -24,8 +25,8 @@ extern "C"
 JNIEXPORT jobject JNICALL
 Java_org_coderoller_jnisample_testers_ArrayTester_getObjectItemNative(
         JNIEnv *env, jobject instance, jobjectArray array, jint idx) {
-    jpp::Class array_class = jpp::Class::resolve_class(env, array);
-    jpp::Array<jpp::Object> array_object(&array_class, array);
+    jpp::Env jpp_env(env);
+    jpp::Array<jpp::Object> array_object = jpp_env.wrap(array);
     return env->NewLocalRef(array_object.get(idx).get_jobject());
 }
 
@@ -34,11 +35,10 @@ JNIEXPORT void JNICALL
 Java_org_coderoller_jnisample_testers_ArrayTester_setObjectItemNative(
         JNIEnv *env, jobject instance, jobjectArray array, jint idx, jobject newItem) {
     env->SetObjectArrayElement(array, idx, newItem);
-    jpp::Class array_class = jpp::Class::resolve_class(env, array);
-    jpp::Array<jpp::Object> array_object(&array_class, array);
+    jpp::Env jpp_env(env);
+    jpp::Array<jpp::Object> array_object = jpp_env.wrap(array);
 
-    jpp::Class item_class = jpp::Class::resolve_class(env, newItem);
-    jpp::Object item_object(&item_class, newItem);
+    jpp::Object item_object = jpp_env.wrap(newItem);
     array_object.set(idx, item_object);
 }
 
@@ -47,7 +47,8 @@ JNIEXPORT jbyteArray JNICALL
 Java_org_coderoller_jnisample_testers_ArrayTester_createByteArrayNative(JNIEnv *env,
                                                                         jobject instance,
                                                                         jint size) {
-    jpp::Class array_class(env, "[B");
+    jpp::Env jpp_env(env);
+    jpp::Class array_class = jpp_env.find_class("[B");
     auto array_object = array_class.create_array<jbyte>(size);
     return (jbyteArray) env->NewLocalRef(array_object.get_jarray());
 }
@@ -57,8 +58,8 @@ JNIEXPORT jint JNICALL
 Java_org_coderoller_jnisample_testers_ArrayTester_getByteLengthNative(JNIEnv *env,
                                                                       jobject instance,
                                                                       jbyteArray array) {
-    jpp::Class array_class = jpp::Class::resolve_class(env, array);
-    jpp::Array<jbyte> array_object(&array_class, array);
+    jpp::Env jpp_env(env);
+    jpp::Array<jbyte> array_object = jpp_env.wrap(array);
     return array_object.get_length();
 }
 
@@ -68,8 +69,8 @@ Java_org_coderoller_jnisample_testers_ArrayTester_getByteItemNative(JNIEnv *env,
                                                                     jobject instance,
                                                                     jbyteArray array,
                                                                     jint idx) {
-    jpp::Class array_class = jpp::Class::resolve_class(env, array);
-    jpp::Array<jbyte> array_object(&array_class, array);
+    jpp::Env jpp_env(env);
+    jpp::Array<jbyte> array_object = jpp_env.wrap(array);
     return array_object.get(idx);
 }
 
@@ -80,7 +81,7 @@ Java_org_coderoller_jnisample_testers_ArrayTester_setByteItemNative(JNIEnv *env,
                                                                     jbyteArray array,
                                                                     jint idx,
                                                                     jbyte newItem) {
-    jpp::Class array_class = jpp::Class::resolve_class(env, array);
-    jpp::Array<jbyte> array_object(&array_class, array);
+    jpp::Env jpp_env(env);
+    jpp::Array<jbyte> array_object = jpp_env.wrap(array);
     array_object.set(idx, newItem);
 }

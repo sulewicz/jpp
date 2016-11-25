@@ -7,18 +7,20 @@
 #include "Array.h"
 
 namespace jpp {
+    class Env;
+    class Cache;
+
     class Class {
     public:
-        Class(JNIEnv *env);
-        Class(JNIEnv *env, const char *class_name);
-        Class(JNIEnv *env, jclass _class);
         Class(const Class &other);
         ~Class();
 
+        Class &operator=(const Class &other);
+
         bool is_valid() const;
-        const std::string &get_class_name() const;
+        const char *get_class_name() const;
         std::string get_signature_name() const;
-        JNIEnv *get_env() const;
+        Env *get_env() const;
         jclass get_jclass() const;
 
         Class get_super_class();
@@ -27,30 +29,27 @@ namespace jpp {
         bool is_object_class() const;
         bool is_array_class() const;
 
-        static Class resolve_class(JNIEnv *env, jobject object);
-        static std::string resolve_class_name(JNIEnv *env, Object &class_object);
-
         template<class ... Types>
         Object create(Types ... args) {
             auto signature = common::generate_signature((void *) 0, args...);
             return do_create(signature.c_str(), type::flatten(args)...);
         }
 
-
         template<class Type>
         Array<Type> create_array(size_t size) {
             if (is_array_class()) {
-                jarray array = common::new_array(m_env, m_jclass, m_class_name, size);
-                return Array<Type>(this, array);
+                jarray array = do_create_array(size);
+                return Array<Type>(*this, array);
             } else {
-                return Array<Type>(this);
+                return Array<Type>(*this, nullptr);
             }
         }
 
         template<class ... Types>
         Object call_object(const char *method_name, Class &return_type, Types ... args) {
             auto signature = common::generate_signature(return_type, args...);
-            return run_object(return_type, method_name, signature.c_str(), type::flatten(args)...);
+            return run_object(return_type, method_name, signature.c_str(),
+                              type::flatten(args)...);
         }
 
         template<class ... Types>
@@ -66,33 +65,12 @@ namespace jpp {
         }
 
     private:
-        Class(JNIEnv *env, jclass _class, const char *class_name);
+        Class(Env *env);
+        Class(Env *env, jclass _class, const char *class_name);
 
-
-        inline Object do_create(const char *signature,
-                                ...) {
-            va_list vl;
-            va_start(vl, signature);
-            auto ret = do_create_v(signature, vl);
-            va_end(vl);
-            return ret;
-        }
-
-        inline Object run_object(Class &return_type, const char *method_name, const char *signature,
-                                 ...) {
-            va_list vl;
-            va_start(vl, signature);
-            auto ret = run_v(return_type, method_name, signature, vl);
-            va_end(vl);
-            return ret;
-        }
-
-        inline void run_void(const char *method_name, const char *signature, ...) {
-            va_list vl;
-            va_start(vl, signature);
-            run_v(method_name, signature, vl);
-            va_end(vl);
-        }
+        Object do_create(const char *signature, ...);
+        Object run_object(Class &return_type, const char *method_name, const char *signature, ...);
+        void run_void(const char *method_name, const char *signature, ...);
 
         template<class Ret>
         inline Ret run(Ret type, const char *method_name, const char *signature, ...) {
@@ -103,6 +81,7 @@ namespace jpp {
             return ret;
         }
 
+        jarray do_create_array(size_t size);
         Object do_create_v(const char *signature, va_list vl);
         Object run_v(Class &return_type, const char *method_name, const char *signature,
                      va_list vl);
@@ -110,8 +89,11 @@ namespace jpp {
         template<class Ret>
         Ret run_v(Ret, const char *method_name, const char *signature, va_list vl);
 
-        JNIEnv *const m_env;
+        Env *m_env;
         jclass m_jclass = nullptr;
-        std::string m_class_name;
+        const char *m_class_name;
+
+        friend class Cache;
+        friend class Env;
     };
 }

@@ -1,6 +1,5 @@
 package org.coderoller.jnisample;
 
-import android.support.test.espresso.core.deps.guava.primitives.Shorts;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.coderoller.jnisample.testers.MethodTester;
@@ -38,8 +37,7 @@ public class MethodUnitTest {
         long l = (long) 5;
         float f = (float) 6;
         double d = (double) 7;
-        String str = "test";
-        mTester.callMultiParamMethod(o, bool, b, c, s, i, l, f, d, str);
+        mTester.callMultiParamMethod(o, bool, b, c, s, i, l, f, d);
         assertEquals(o, mTester.getObject());
         assertEquals(bool, mTester.isBoolean());
         assertEquals(b, mTester.getByte());
@@ -49,7 +47,6 @@ public class MethodUnitTest {
         assertEquals(l, mTester.getLong());
         assertTrue(f == mTester.getFloat());
         assertTrue(d == mTester.getDouble());
-        assertEquals(str, mTester.getString());
     }
 
     @Test
@@ -112,13 +109,6 @@ public class MethodUnitTest {
     public void testReturningDouble() throws Exception {
         mTester.setDouble(Double.MIN_VALUE);
         assertTrue(Double.MIN_VALUE == mTester.callDoubleMethod());
-    }
-
-    @Test
-    public void testToString() throws Exception {
-        String testValue = "This is a test.";
-        mTester.setString(testValue);
-        assertEquals(testValue, mTester.callToString());
     }
 
     @Test

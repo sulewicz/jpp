@@ -15,11 +15,10 @@ public class MethodTester {
     private long mLong = 0;
     private float mFloat = 0;
     private double mDouble = 0;
-    private String mString = "";
 
     // Methods invoked from native layer.
 
-    private void multiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d, String str) {
+    private void multiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d) {
         mObject = o;
         mBoolean = bool;
         mByte = b;
@@ -29,7 +28,6 @@ public class MethodTester {
         mLong = l;
         mFloat = f;
         mDouble = d;
-        mString = str;
     }
 
     private Object objectMethod() {
@@ -70,11 +68,6 @@ public class MethodTester {
 
     private double doubleMethod() {
         return mDouble;
-    }
-
-    @Override
-    public String toString() {
-        return mString;
     }
 
     // Helper methods used by unit tests.
@@ -151,18 +144,10 @@ public class MethodTester {
         mDouble = aDouble;
     }
 
-    public String getString() {
-        return mString;
-    }
-
-    public void setString(String string) {
-        mString = string;
-    }
-
     // Methods used for actual testing.
 
-    public void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d, String str) {
-        callMultiParamMethodNative(o, bool, b, c, s, i, l, f, d, str);
+    public void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d) {
+        callMultiParamMethodNative(o, bool, b, c, s, i, l, f, d);
     }
 
     public Object callObjectMethod() {
@@ -208,16 +193,11 @@ public class MethodTester {
         return callDoubleMethodNative();
     }
 
-    public String callToString() {
-        return callToStringNative();
-    }
-
     public Class<?> callGetClass() {
         return callGetClassNative();
     }
 
-    private native void callMultiParamMethodNative(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d,
-                                                   String str);
+    private native void callMultiParamMethodNative(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d);
 
     private native Object callObjectMethodNative();
 
@@ -238,8 +218,6 @@ public class MethodTester {
     private native float callFloatMethodNative();
 
     private native double callDoubleMethodNative();
-
-    private native String callToStringNative();
 
     private native Class<?> callGetClassNative();
 }
