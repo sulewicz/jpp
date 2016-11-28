@@ -79,23 +79,93 @@ Object Env::wrap(Class &_class, jobject _jobject) {
     return Object(_class, _jobject);
 }
 
-Array<Object> Env::wrap(jobjectArray _jobjectArray) {
-    Class _class = wrap(m_jenv->GetObjectClass(_jobjectArray));
-    return Array<Object>(_class, _jobjectArray);
+Array<Object> Env::wrap(jobjectArray _jarray) {
+    Class _class = wrap(m_jenv->GetObjectClass(_jarray));
+    return Array<Object>(_class, _jarray);
 }
 
-Array<jbyte> Env::wrap(jbyteArray _jbyteArray) {
-    Class _class = wrap(m_jenv->GetObjectClass(_jbyteArray));
-    return Array<jbyte>(_class, _jbyteArray);
+Array<jboolean> Env::wrap(jbooleanArray _jarray) {
+    Class _class = wrap(m_jenv->GetObjectClass(_jarray));
+    return Array<jboolean>(_class, _jarray);
 }
 
-Array<Object> Env::create_array(size_t size, Class& element_class) {
+Array<jbyte> Env::wrap(jbyteArray _jarray) {
+    Class _class = wrap(m_jenv->GetObjectClass(_jarray));
+    return Array<jbyte>(_class, _jarray);
+}
+
+Array<jchar> Env::wrap(jcharArray _jarray) {
+    Class _class = wrap(m_jenv->GetObjectClass(_jarray));
+    return Array<jchar>(_class, _jarray);
+}
+
+Array<jshort> Env::wrap(jshortArray _jarray) {
+    Class _class = wrap(m_jenv->GetObjectClass(_jarray));
+    return Array<jshort>(_class, _jarray);
+}
+
+Array<jint> Env::wrap(jintArray _jarray) {
+    Class _class = wrap(m_jenv->GetObjectClass(_jarray));
+    return Array<jint>(_class, _jarray);
+}
+
+Array<jlong> Env::wrap(jlongArray _jarray) {
+    Class _class = wrap(m_jenv->GetObjectClass(_jarray));
+    return Array<jlong>(_class, _jarray);
+}
+
+Array<jfloat> Env::wrap(jfloatArray _jarray) {
+    Class _class = wrap(m_jenv->GetObjectClass(_jarray));
+    return Array<jfloat>(_class, _jarray);
+}
+
+Array<jdouble> Env::wrap(jdoubleArray _jarray) {
+    Class _class = wrap(m_jenv->GetObjectClass(_jarray));
+    return Array<jdouble>(_class, _jarray);
+}
+
+Array<Object> Env::create_array(size_t size, Class &element_class) {
     return wrap(m_jenv->NewObjectArray(size, element_class.get_jclass(), nullptr));
 }
 
 template<>
-Array<jbyte> Env::create_array(size_t size, jbyte* type) {
+Array<jboolean> Env::create_array(size_t size, jboolean *type) {
+    return wrap(m_jenv->NewBooleanArray(size));
+}
+
+template<>
+Array<jbyte> Env::create_array(size_t size, jbyte *type) {
     return wrap(m_jenv->NewByteArray(size));
+}
+
+template<>
+Array<jchar> Env::create_array(size_t size, jchar *type) {
+    return wrap(m_jenv->NewCharArray(size));
+}
+
+template<>
+Array<jshort> Env::create_array(size_t size, jshort *type) {
+    return wrap(m_jenv->NewShortArray(size));
+}
+
+template<>
+Array<jint> Env::create_array(size_t size, jint *type) {
+    return wrap(m_jenv->NewIntArray(size));
+}
+
+template<>
+Array<jlong> Env::create_array(size_t size, jlong *type) {
+    return wrap(m_jenv->NewLongArray(size));
+}
+
+template<>
+Array<jfloat> Env::create_array(size_t size, jfloat *type) {
+    return wrap(m_jenv->NewFloatArray(size));
+}
+
+template<>
+Array<jdouble> Env::create_array(size_t size, jdouble *type) {
+    return wrap(m_jenv->NewDoubleArray(size));
 }
 
 Class Env::get_superclass(Class &_class) {
