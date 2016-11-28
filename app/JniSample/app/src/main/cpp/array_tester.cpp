@@ -7,8 +7,8 @@ Java_org_coderoller_jnisample_testers_ArrayTester_createObjectArrayNative(JNIEnv
                                                                           jobject instance,
                                                                           jint size) {
     jpp::Env jpp_env(env);
-    jpp::Class array_class = jpp_env.find_class("[Ljava/lang/Object;");
-    auto array_object = array_class.create_array<jpp::Object>(size);
+    jpp::Class item_class = jpp_env.find_class("java/lang/Object");
+    auto array_object = jpp_env.create_array(size, item_class);
     return (jobjectArray) env->NewLocalRef(array_object.get_jarray());
 }
 
@@ -48,8 +48,7 @@ Java_org_coderoller_jnisample_testers_ArrayTester_createByteArrayNative(JNIEnv *
                                                                         jobject instance,
                                                                         jint size) {
     jpp::Env jpp_env(env);
-    jpp::Class array_class = jpp_env.find_class("[B");
-    auto array_object = array_class.create_array<jbyte>(size);
+    auto array_object = jpp_env.create_array<jbyte>(size);
     return (jbyteArray) env->NewLocalRef(array_object.get_jarray());
 }
 

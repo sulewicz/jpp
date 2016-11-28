@@ -7,7 +7,7 @@ namespace jpp {
     class Object;
     class Class;
     class AbstractArray;
-    namespace type {
+    namespace internal {
         jboolean flatten(jboolean &);
         jbyte flatten(jbyte &);
         jchar flatten(jchar &);

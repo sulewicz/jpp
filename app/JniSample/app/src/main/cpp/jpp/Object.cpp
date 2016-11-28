@@ -2,6 +2,11 @@
 #include "Class.h"
 #include "Env.h"
 
+#define VA_START va_list vl;\
+    va_start(vl, signature);
+
+#define VA_END va_end(vl);
+
 using namespace jpp;
 
 Object::Object(Class &_class) : m_class(new Class(_class)) {
@@ -22,7 +27,7 @@ Object::Object(const Object &other) {
     }
 }
 
-Object::Object(Object &&other) : m_class(std::move(other.m_class)){
+Object::Object(Object &&other) : m_class(std::move(other.m_class)) {
     m_class = other.m_class;
     other.m_class = nullptr;
     m_jobject = other.m_jobject;
@@ -61,106 +66,80 @@ jobject Object::get_jobject() const {
     return m_jobject;
 }
 
-Object Object::run_v(Class &return_type, const char *method_name, const char *signature,
-                     va_list vl) {
-    auto jenv = get_env()->get_jenv();
-    auto ret = common::invoke_method<jobject>(jenv, get_jclass(), method_name, signature,
-                                              [&](jmethodID method_id) {
-                                                  return jenv->CallObjectMethodV(get_jobject(),
-                                                                                 method_id,
-                                                                                 vl);
-                                              });
-    return Object(return_type, ret);
+Object Object::do_call(const char *method_name, const char *signature,
+                       ...) {
+    VA_START
+    auto ret = get_env()->call_method(*this, method_name, signature, vl);
+    VA_END
+    return ret;
 }
 
-void Object::run_v(const char *method_name, const char *signature, va_list vl) {
-    auto jenv = get_env()->get_jenv();
-    common::invoke_method<void>(jenv, get_jclass(), method_name, signature,
-                                [&](jmethodID method_id) {
-                                    jenv->CallVoidMethodV(get_jobject(), method_id, vl);
-                                });
+void Object::do_call(void *type, const char *method_name, const char *signature, ...) {
+    VA_START
+    get_env()->call_method(*this, method_name, signature, vl, (void *) 0);
+    VA_END
 }
 
 template<>
-jboolean Object::run_v(jboolean, const char *method_name, const char *signature, va_list vl) {
-    auto jenv = get_env()->get_jenv();
-    return common::invoke_method<jboolean>(jenv, get_jclass(), method_name, signature,
-                                           [&](jmethodID method_id) {
-                                               return jenv->CallBooleanMethodV(get_jobject(),
-                                                                               method_id,
-                                                                               vl);
-                                           });
+jboolean Object::do_call(jboolean, const char *method_name, const char *signature, ...) {
+    VA_START
+    auto ret = get_env()->call_method<jboolean>(*this, method_name, signature, vl);
+    VA_END
+    return ret;
 }
 
 template<>
-jbyte Object::run_v(jbyte, const char *method_name, const char *signature, va_list vl) {
-    auto jenv = get_env()->get_jenv();
-    return common::invoke_method<jbyte>(jenv, get_jclass(), method_name, signature,
-                                        [&](jmethodID method_id) {
-                                            return jenv->CallByteMethodV(get_jobject(),
-                                                                         method_id, vl);
-                                        });
+jbyte Object::do_call(jbyte, const char *method_name, const char *signature, ...) {
+    VA_START
+    auto ret = get_env()->call_method<jbyte>(*this, method_name, signature, vl);
+    VA_END
+    return ret;
 }
 
 template<>
-jchar Object::run_v(jchar, const char *method_name, const char *signature, va_list vl) {
-    auto jenv = get_env()->get_jenv();
-    return common::invoke_method<jchar>(jenv, get_jclass(), method_name, signature,
-                                        [&](jmethodID method_id) {
-                                            return jenv->CallCharMethodV(get_jobject(),
-                                                                         method_id, vl);
-                                        });
+jchar Object::do_call(jchar, const char *method_name, const char *signature, ...) {
+    VA_START
+    auto ret = get_env()->call_method<jchar>(*this, method_name, signature, vl);
+    VA_END
+    return ret;
 }
 
 template<>
-jshort Object::run_v(jshort, const char *method_name, const char *signature, va_list vl) {
-    auto jenv = get_env()->get_jenv();
-    return common::invoke_method<jshort>(jenv, get_jclass(), method_name, signature,
-                                         [&](jmethodID method_id) {
-                                             return jenv->CallShortMethodV(get_jobject(),
-                                                                           method_id,
-                                                                           vl);
-                                         });
+jshort Object::do_call(jshort, const char *method_name, const char *signature, ...) {
+    VA_START
+    auto ret = get_env()->call_method<jshort>(*this, method_name, signature, vl);
+    VA_END
+    return ret;
 }
 
 template<>
-jint Object::run_v(jint, const char *method_name, const char *signature, va_list vl) {
-    auto jenv = get_env()->get_jenv();
-    return common::invoke_method<jint>(jenv, get_jclass(), method_name, signature,
-                                       [&](jmethodID method_id) {
-                                           return jenv->CallIntMethodV(get_jobject(),
-                                                                       method_id, vl);
-                                       });
+jint Object::do_call(jint, const char *method_name, const char *signature, ...) {
+    VA_START
+    auto ret = get_env()->call_method<jint>(*this, method_name, signature, vl);
+    VA_END
+    return ret;
 }
 
 template<>
-jlong Object::run_v(jlong, const char *method_name, const char *signature, va_list vl) {
-    auto jenv = get_env()->get_jenv();
-    return common::invoke_method<jlong>(jenv, get_jclass(), method_name, signature,
-                                        [&](jmethodID method_id) {
-                                            return jenv->CallLongMethodV(get_jobject(),
-                                                                         method_id, vl);
-                                        });
+jlong Object::do_call(jlong, const char *method_name, const char *signature, ...) {
+    VA_START
+    auto ret = get_env()->call_method<jlong>(*this, method_name, signature, vl);
+    VA_END
+    return ret;
 }
 
 template<>
-jfloat Object::run_v(jfloat, const char *method_name, const char *signature, va_list vl) {
-    auto jenv = get_env()->get_jenv();
-    return common::invoke_method<jfloat>(jenv, get_jclass(), method_name, signature,
-                                         [&](jmethodID method_id) {
-                                             return jenv->CallFloatMethodV(get_jobject(),
-                                                                           method_id,
-                                                                           vl);
-                                         });
+jfloat Object::do_call(jfloat, const char *method_name, const char *signature, ...) {
+    VA_START
+    auto ret = get_env()->call_method<jfloat>(*this, method_name, signature, vl);
+    VA_END
+    return ret;
 }
 
 template<>
-jdouble Object::run_v(jdouble, const char *method_name, const char *signature, va_list vl) {
-    auto jenv = get_env()->get_jenv();
-    return common::invoke_method<jdouble>(jenv, get_jclass(), method_name, signature,
-                                          [&](jmethodID method_id) {
-                                              return jenv->CallDoubleMethodV(get_jobject(),
-                                                                             method_id,
-                                                                             vl);
-                                          });
+jdouble Object::do_call(jdouble, const char *method_name, const char *signature, ...) {
+    VA_START;
+    auto ret = get_env()->call_method<jdouble>(*this, method_name, signature, vl);
+    VA_END
+    return ret;
 }
