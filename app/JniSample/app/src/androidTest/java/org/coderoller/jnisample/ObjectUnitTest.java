@@ -35,4 +35,28 @@ public class ObjectUnitTest {
         assertFalse(mTester.checkEquality(null, b));
         assertTrue(mTester.checkEquality(null, null));
     }
+
+    @Test
+    public void testInstanceOf() {
+        Object object = new Object();
+        Integer integer = new Integer(3);
+        assertTrue(mTester.isInstanceOf(object, Object.class));
+        assertTrue(mTester.isInstanceOf(integer, Integer.class));
+        assertTrue(mTester.isInstanceOf(integer, Object.class));
+        assertFalse(mTester.isInstanceOf(object, Integer.class));
+        assertFalse(mTester.isInstanceOf(null, Object.class));
+        assertFalse(mTester.isInstanceOf(null, Integer.class));
+        assertFalse(mTester.isInstanceOf(null, null));
+    }
+
+    @Test
+    public void testCastTo() {
+        assertTrue(mTester.castTo(new Object(), Object.class));
+        assertTrue(mTester.castTo(new Integer(3), Object.class));
+        assertFalse(mTester.castTo(new Object(), Integer.class));
+        assertFalse(mTester.castTo(new String(), Integer.class));
+        assertFalse(mTester.castTo(null, Object.class));
+        assertFalse(mTester.castTo(null, Integer.class));
+        assertFalse(mTester.castTo(null, null));
+    }
 }

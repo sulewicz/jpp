@@ -23,6 +23,9 @@ namespace jpp {
         jclass get_jclass() const;
         jobject get_jobject() const;
 
+        bool is_instance_of(Class& other);
+        bool cast_to(Class& other);
+
         template<class ... Types>
         Object call_object(const char *method_name, Class &return_type, Types ... args) {
             auto signature = internal::generate_signature(return_type, args...);

@@ -70,7 +70,7 @@ Class Class::get_super_class() {
     return m_env->get_superclass(*this);
 }
 
-bool Class::is_assignable_from(Class &from_class) {
+bool Class::is_assignable_from(Class &from_class) const {
     if (is_valid() && from_class.is_valid()) {
         return m_env->get_jenv()->IsAssignableFrom(from_class.get_jclass(), m_jclass);
     }

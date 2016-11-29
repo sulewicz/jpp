@@ -26,7 +26,7 @@ namespace jpp {
         jclass get_jclass() const;
 
         Class get_super_class();
-        bool is_assignable_from(Class &from_class);
+        bool is_assignable_from(Class &from_class) const;
 
         bool is_object_class() const;
         bool is_array_class() const;

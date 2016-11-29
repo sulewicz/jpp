@@ -14,7 +14,7 @@ Object::Object(Class &_class) : m_class(new Class(_class)) {
 
 Object::Object(Class &_class, jobject object) : m_class(new Class(_class)) {
     if (object != nullptr) {
-        m_jobject = m_class->get_env()->get_jenv()->NewGlobalRef(object);
+        m_jobject = m_class->get_env()->get_jenv()->NewLocalRef(object);
     }
 }
 
@@ -22,7 +22,7 @@ Object::Object(const Object &other) {
     if (other.m_class != nullptr) {
         m_class = new Class(*other.m_class);
         if (other.m_jobject != nullptr) {
-            m_jobject = m_class->get_env()->get_jenv()->NewGlobalRef(other.m_jobject);
+            m_jobject = m_class->get_env()->get_jenv()->NewLocalRef(other.m_jobject);
         }
     }
 }
@@ -37,7 +37,7 @@ Object::Object(Object &&other) : m_class(std::move(other.m_class)) {
 Object::~Object() {
     if (m_class != nullptr) {
         if (m_jobject != nullptr) {
-            m_class->get_env()->get_jenv()->DeleteGlobalRef(m_jobject);
+            m_class->get_env()->get_jenv()->DeleteLocalRef(m_jobject);
             m_jobject = nullptr;
         }
 
@@ -72,6 +72,19 @@ jclass Object::get_jclass() const {
 
 jobject Object::get_jobject() const {
     return m_jobject;
+}
+
+bool Object::is_instance_of(Class &other) {
+    return is_valid() && get_env()->get_jenv()->IsInstanceOf(m_jobject, other.get_jclass());
+}
+
+bool Object::cast_to(Class &other) {
+    if (is_instance_of(other)) {
+        delete m_class;
+        m_class = new Class(other);
+        return true;
+    }
+    return false;
 }
 
 Object Object::do_call(const char *method_name, const char *signature,
