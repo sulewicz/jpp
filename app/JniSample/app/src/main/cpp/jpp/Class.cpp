@@ -31,6 +31,14 @@ Class &Class::operator=(const Class &other) {
     return *this;
 }
 
+bool Class::operator==(const Class &other) {
+    return m_env->get_jenv()->IsSameObject(m_jclass, other.m_jclass);
+}
+
+bool Class::operator!=(const Class &other) {
+    return !(*this == other);
+}
+
 Class::~Class() {
 }
 

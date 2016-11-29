@@ -2,9 +2,7 @@ package org.coderoller.jnisample;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import org.coderoller.jnisample.testers.MethodTester;
 import org.coderoller.jnisample.testers.StaticMethodTester;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

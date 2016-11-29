@@ -3,9 +3,8 @@
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_org_coderoller_jnisample_testers_ClassTester_createObjectNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_ClassTester_createObject(JNIEnv *env,
                                                                      jobject instance) {
-
     jpp::Env jpp_env(env);
     auto integer_class = jpp_env.find_class("java/lang/Integer");
     auto ret = integer_class.create(3);
@@ -14,7 +13,7 @@ Java_org_coderoller_jnisample_testers_ClassTester_createObjectNative(JNIEnv *env
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_org_coderoller_jnisample_testers_ClassTester_createSimpleClassNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_ClassTester_createSimpleClass(JNIEnv *env,
                                                                           jobject instance,
                                                                           jobject o,
                                                                           jboolean boolean,
@@ -33,9 +32,8 @@ Java_org_coderoller_jnisample_testers_ClassTester_createSimpleClassNative(JNIEnv
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_org_coderoller_jnisample_testers_ClassTester_getSuperclassNative(JNIEnv *env, jobject instance,
+Java_org_coderoller_jnisample_testers_ClassTester_getSuperclass(JNIEnv *env, jobject instance,
                                                                       jobject _class) {
-
     jpp::Env jpp_env(env);
     auto passed_class = jpp_env.wrap((jclass) _class);
     auto ret = passed_class.get_super_class();
@@ -48,13 +46,22 @@ Java_org_coderoller_jnisample_testers_ClassTester_getSuperclassNative(JNIEnv *en
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_org_coderoller_jnisample_testers_ClassTester_checkAssignabilityNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_ClassTester_checkAssignability(JNIEnv *env,
                                                                            jobject instance,
                                                                            jobject from,
                                                                            jobject to) {
-
     jpp::Env jpp_env(env);
     auto from_class = jpp_env.wrap((jclass) from);
     auto to_class = jpp_env.wrap((jclass) to);
     return to_class.is_assignable_from(from_class);
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_org_coderoller_jnisample_testers_ClassTester_checkEquality(JNIEnv *env, jobject instance,
+                                                                jobject first, jobject second) {
+    jpp::Env jpp_env(env);
+    auto first_class = jpp_env.wrap((jclass) first);
+    auto second_class = jpp_env.wrap((jclass) second);
+    return first_class == second_class;
 }

@@ -21,6 +21,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/array_tester.cpp
              src/main/cpp/class_tester.cpp
              src/main/cpp/method_tester.cpp
+             src/main/cpp/object_tester.cpp
              src/main/cpp/static_method_tester.cpp
              src/main/cpp/jpp/Array.cpp
              src/main/cpp/jpp/Cache.cpp

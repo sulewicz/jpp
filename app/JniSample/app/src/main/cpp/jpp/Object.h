@@ -13,6 +13,9 @@ namespace jpp {
         Object(Object &&other);
         ~Object();
 
+        bool operator==(const Object &other);
+        bool operator!=(const Object &other);
+
         bool is_valid() const;
 
         Class &get_class();

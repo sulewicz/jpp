@@ -46,6 +46,14 @@ Object::~Object() {
     }
 }
 
+bool Object::operator==(const Object &other) {
+    return get_env()->get_jenv()->IsSameObject(m_jobject, other.m_jobject);
+}
+
+bool Object::operator!=(const Object &other) {
+    return !(*this == other);
+}
+
 bool Object::is_valid() const {
     return m_class != nullptr && m_jobject != nullptr;
 }

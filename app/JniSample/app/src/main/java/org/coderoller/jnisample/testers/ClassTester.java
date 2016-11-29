@@ -5,30 +5,16 @@ public class ClassTester {
         System.loadLibrary("native-lib");
     }
 
-    public Object createObject() {
-        return createObjectNative();
-    }
+    public native Object createObject();
 
-    public SimpleClass createSimpleClass(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d, String str) {
-        return createSimpleClassNative(o, bool, b, c, s, i, l, f, d, str);
-    }
-
-    public Class<?> getSuperclass(Class<?> _class) {
-        return getSuperclassNative(_class);
-    }
-
-    public boolean checkAssignability(Class<?> from, Class<?> to) {
-        return checkAssignabilityNative(from, to);
-    }
-
-    private native Object createObjectNative();
-
-    private native SimpleClass createSimpleClassNative(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d,
+    public native SimpleClass createSimpleClass(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d,
                                                        String str);
 
-    private native Class<?> getSuperclassNative(Class<?> _class);
+    public native Class<?> getSuperclass(Class<?> _class);
 
-    private native boolean checkAssignabilityNative(Class<?> from, Class<?> to);
+    public native boolean checkAssignability(Class<?> from, Class<?> to);
+
+    public native boolean checkEquality(Class<?> first, Class<?> second);
 
     public static class SimpleClass {
         private Object mObject = null;

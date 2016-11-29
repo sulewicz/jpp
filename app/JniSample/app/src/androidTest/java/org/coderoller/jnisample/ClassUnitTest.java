@@ -79,4 +79,13 @@ public class ClassUnitTest {
         assertFalse(mTester.checkAssignability(null, Object.class));
         assertFalse(mTester.checkAssignability(Object.class, null));
     }
+
+    @Test
+    public void testEquality() {
+        assertTrue(mTester.checkEquality(Number.class, Number.class));
+        assertFalse(mTester.checkEquality(Number.class, Integer.class));
+        assertFalse(mTester.checkEquality(Number.class, null));
+        assertFalse(mTester.checkEquality(null, Integer.class));
+        assertTrue(mTester.checkEquality(null, null));
+    }
 }

@@ -16,6 +16,8 @@ namespace jpp {
         ~Class();
 
         Class &operator=(const Class &other);
+        bool operator==(const Class &other);
+        bool operator!=(const Class &other);
 
         bool is_valid() const;
         const char *get_class_name() const;
