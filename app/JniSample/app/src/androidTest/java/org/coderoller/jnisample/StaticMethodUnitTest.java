@@ -42,6 +42,29 @@ public class StaticMethodUnitTest {
     }
 
     @Test
+    public void testInvokingMultiArrayParamMethod() throws Exception {
+        Object[] o = new Object[1];
+        boolean[] bool = new boolean[2];
+        byte[] b = new byte[3];
+        char[] c = new char[4];
+        short[] s = new short[5];
+        int[] i = new int[6];
+        long[] l = new long[7];
+        float[] f = new float[8];
+        double[] d = new double[9];
+        StaticMethodTester.callMultiParamArrayMethod(o, bool, b, c, s, i, l, f, d);
+        assertTrue(o == StaticMethodTester.getObjectArray());
+        assertEquals(bool, StaticMethodTester.getBooleanArray());
+        assertEquals(b, StaticMethodTester.getByteArray());
+        assertEquals(c, StaticMethodTester.getCharArray());
+        assertEquals(s, StaticMethodTester.getShortArray());
+        assertEquals(i, StaticMethodTester.getIntArray());
+        assertEquals(l, StaticMethodTester.getLongArray());
+        assertEquals(f, StaticMethodTester.getFloatArray());
+        assertEquals(d, StaticMethodTester.getDoubleArray());
+    }
+
+    @Test
     public void testReturningObject() throws Exception {
         Object o = new Integer(3);
         StaticMethodTester.setObject(o);

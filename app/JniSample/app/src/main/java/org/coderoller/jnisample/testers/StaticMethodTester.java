@@ -5,6 +5,8 @@ public class StaticMethodTester {
         System.loadLibrary("native-lib");
     }
 
+    // All types
+
     private static Object sObject = null;
     private static boolean sVoidCalled = false;
     private static boolean sBoolean = false;
@@ -15,6 +17,19 @@ public class StaticMethodTester {
     private static long sLong = 0;
     private static float sFloat = 0;
     private static double sDouble = 0;
+
+    // All array types
+
+    // All array types
+    private static Object[] sObjectArray = null;
+    private static boolean[] sBooleanArray = null;
+    private static byte[] sByteArray = null;
+    private static char[] sCharArray = null;
+    private static short[] sShortArray = null;
+    private static int[] sIntArray = null;
+    private static long[] sLongArray = null;
+    private static float[] sFloatArray = null;
+    private static double[] sDoubleArray = null;
 
     // Methods invoked from native layer.
 
@@ -28,6 +43,19 @@ public class StaticMethodTester {
         sLong = l;
         sFloat = f;
         sDouble = d;
+    }
+
+    private static void multiParamArrayMethod(Object[] o, boolean[] bool, byte[] b, char[] c, short[] s, int[] i, long[] l, float[] f, double[]
+            d) {
+        sObjectArray = o;
+        sBooleanArray = bool;
+        sByteArray = b;
+        sCharArray = c;
+        sShortArray = s;
+        sIntArray = i;
+        sLongArray = l;
+        sFloatArray = f;
+        sDoubleArray = d;
     }
 
     private static Object objectMethod() {
@@ -83,6 +111,15 @@ public class StaticMethodTester {
         sLong = 0;
         sFloat = 0;
         sDouble = 0;
+        sObjectArray = null;
+        sBooleanArray = null;
+        sByteArray = null;
+        sCharArray = null;
+        sShortArray = null;
+        sIntArray = null;
+        sLongArray = null;
+        sFloatArray = null;
+        sDoubleArray = null;
     }
 
     public static Object getObject() {
@@ -157,6 +194,78 @@ public class StaticMethodTester {
         sDouble = aDouble;
     }
 
+    public static Object[] getObjectArray() {
+        return sObjectArray;
+    }
+
+    public static void setObjectArray(Object[] objectArray) {
+        sObjectArray = objectArray;
+    }
+
+    public static boolean[] getBooleanArray() {
+        return sBooleanArray;
+    }
+
+    public static void setBooleanArray(boolean[] booleanArray) {
+        sBooleanArray = booleanArray;
+    }
+
+    public static byte[] getByteArray() {
+        return sByteArray;
+    }
+
+    public static void setByteArray(byte[] byteArray) {
+        sByteArray = byteArray;
+    }
+
+    public static char[] getCharArray() {
+        return sCharArray;
+    }
+
+    public static void setCharArray(char[] charArray) {
+        sCharArray = charArray;
+    }
+
+    public static short[] getShortArray() {
+        return sShortArray;
+    }
+
+    public static void setShortArray(short[] shortArray) {
+        sShortArray = shortArray;
+    }
+
+    public static int[] getIntArray() {
+        return sIntArray;
+    }
+
+    public static void setIntArray(int[] intArray) {
+        sIntArray = intArray;
+    }
+
+    public static long[] getLongArray() {
+        return sLongArray;
+    }
+
+    public static void setLongArray(long[] longArray) {
+        sLongArray = longArray;
+    }
+
+    public static float[] getFloatArray() {
+        return sFloatArray;
+    }
+
+    public static void setFloatArray(float[] floatArray) {
+        sFloatArray = floatArray;
+    }
+
+    public static double[] getDoubleArray() {
+        return sDoubleArray;
+    }
+
+    public static void setDoubleArray(double[] doubleArray) {
+        sDoubleArray = doubleArray;
+    }
+
     // Methods used for actual testing.
 
     public static boolean callVoidMethod() {
@@ -168,6 +277,10 @@ public class StaticMethodTester {
 
     public static native void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double
             d);
+
+    public static native void callMultiParamArrayMethod(Object[] o, boolean[] bool, byte[] b, char[] c, short[] s, int[] i, long[] l,
+                                                        float[] f,
+                                                        double[] d);
 
     public static native Object callObjectMethod();
 
