@@ -146,14 +146,6 @@ public class MethodTester {
 
     // Methods used for actual testing.
 
-    public void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d) {
-        callMultiParamMethodNative(o, bool, b, c, s, i, l, f, d);
-    }
-
-    public Object callObjectMethod() {
-        return callObjectMethodNative();
-    }
-
     public boolean callVoidMethod() {
         callVoidMethodNative();
         boolean ret = mVoidCalled;
@@ -161,63 +153,27 @@ public class MethodTester {
         return ret;
     }
 
-    public boolean callBooleanMethod() {
-        return callBooleanMethodNative();
-    }
+    public native void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d);
 
-    public byte callByteMethod() {
-        return callByteMethodNative();
-    }
+    public native Object callObjectMethod();
 
-    public char callCharMethod() {
-        return callCharMethodNative();
-    }
+    public native void callVoidMethodNative();
 
-    public short callShortMethod() {
-        return callShortMethodNative();
-    }
+    public native boolean callBooleanMethod();
 
-    public int callIntMethod() {
-        return callIntMethodNative();
-    }
+    public native byte callByteMethod();
 
-    public long callLongMethod() {
-        return callLongMethodNative();
-    }
+    public native char callCharMethod();
 
-    public float callFloatMethod() {
-        return callFloatMethodNative();
-    }
+    public native short callShortMethod();
 
-    public double callDoubleMethod() {
-        return callDoubleMethodNative();
-    }
+    public native int callIntMethod();
 
-    public Class<?> callGetClass() {
-        return callGetClassNative();
-    }
+    public native long callLongMethod();
 
-    private native void callMultiParamMethodNative(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d);
+    public native float callFloatMethod();
 
-    private native Object callObjectMethodNative();
+    public native double callDoubleMethod();
 
-    private native void callVoidMethodNative();
-
-    private native boolean callBooleanMethodNative();
-
-    private native byte callByteMethodNative();
-
-    private native char callCharMethodNative();
-
-    private native short callShortMethodNative();
-
-    private native int callIntMethodNative();
-
-    private native long callLongMethodNative();
-
-    private native float callFloatMethodNative();
-
-    private native double callDoubleMethodNative();
-
-    private native Class<?> callGetClassNative();
+    public native Class<?> callGetClass();
 }

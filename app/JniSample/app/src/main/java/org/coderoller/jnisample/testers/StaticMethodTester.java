@@ -159,14 +159,6 @@ public class StaticMethodTester {
 
     // Methods used for actual testing.
 
-    public static void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d) {
-        callMultiParamMethodNative(o, bool, b, c, s, i, l, f, d);
-    }
-
-    public static Object callObjectMethod() {
-        return callObjectMethodNative();
-    }
-
     public static boolean callVoidMethod() {
         callVoidMethodNative();
         boolean ret = sVoidCalled;
@@ -174,58 +166,26 @@ public class StaticMethodTester {
         return ret;
     }
 
-    public static boolean callBooleanMethod() {
-        return callBooleanMethodNative();
-    }
-
-    public static byte callByteMethod() {
-        return callByteMethodNative();
-    }
-
-    public static char callCharMethod() {
-        return callCharMethodNative();
-    }
-
-    public static short callShortMethod() {
-        return callShortMethodNative();
-    }
-
-    public static int callIntMethod() {
-        return callIntMethodNative();
-    }
-
-    public static long callLongMethod() {
-        return callLongMethodNative();
-    }
-
-    public static float callFloatMethod() {
-        return callFloatMethodNative();
-    }
-
-    public static double callDoubleMethod() {
-        return callDoubleMethodNative();
-    }
-
-    private static native void callMultiParamMethodNative(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double
+    public static native void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double
             d);
 
-    private static native Object callObjectMethodNative();
+    public static native Object callObjectMethod();
 
-    private static native void callVoidMethodNative();
+    public static native void callVoidMethodNative();
 
-    private static native boolean callBooleanMethodNative();
+    public static native boolean callBooleanMethod();
 
-    private static native byte callByteMethodNative();
+    public static native byte callByteMethod();
 
-    private static native char callCharMethodNative();
+    public static native char callCharMethod();
 
-    private static native short callShortMethodNative();
+    public static native short callShortMethod();
 
-    private static native int callIntMethodNative();
+    public static native int callIntMethod();
 
-    private static native long callLongMethodNative();
+    public static native long callLongMethod();
 
-    private static native float callFloatMethodNative();
+    public static native float callFloatMethod();
 
-    private static native double callDoubleMethodNative();
+    public static native double callDoubleMethod();
 }

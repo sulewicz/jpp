@@ -3,7 +3,7 @@
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callMultiParamMethodNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callMultiParamMethod(JNIEnv *env,
                                                                               jobject obj,
                                                                               jobject o,
                                                                               jboolean boolean,
@@ -20,7 +20,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callMultiParamMethodNative(JN
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callObjectMethodNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callObjectMethod(JNIEnv *env,
                                                                           jobject obj) {
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
@@ -40,7 +40,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callVoidMethodNative(JNIEnv *
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callBooleanMethodNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callBooleanMethod(JNIEnv *env,
                                                                            jobject obj) {
 
     jpp::Env jpp_env(env);
@@ -50,7 +50,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callBooleanMethodNative(JNIEn
 
 extern "C"
 JNIEXPORT jbyte JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callByteMethodNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callByteMethod(JNIEnv *env,
                                                                         jobject obj) {
 
     jpp::Env jpp_env(env);
@@ -60,7 +60,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callByteMethodNative(JNIEnv *
 
 extern "C"
 JNIEXPORT jchar JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callCharMethodNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callCharMethod(JNIEnv *env,
                                                                         jobject obj) {
 
     jpp::Env jpp_env(env);
@@ -70,7 +70,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callCharMethodNative(JNIEnv *
 
 extern "C"
 JNIEXPORT jshort JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callShortMethodNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callShortMethod(JNIEnv *env,
                                                                          jobject obj) {
 
     jpp::Env jpp_env(env);
@@ -80,7 +80,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callShortMethodNative(JNIEnv 
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callIntMethodNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callIntMethod(JNIEnv *env,
                                                                        jobject obj) {
 
     jpp::Env jpp_env(env);
@@ -90,7 +90,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callIntMethodNative(JNIEnv *e
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callLongMethodNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callLongMethod(JNIEnv *env,
                                                                         jobject obj) {
 
     jpp::Env jpp_env(env);
@@ -100,7 +100,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callLongMethodNative(JNIEnv *
 
 extern "C"
 JNIEXPORT jfloat JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callFloatMethodNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callFloatMethod(JNIEnv *env,
                                                                          jobject obj) {
 
     jpp::Env jpp_env(env);
@@ -110,7 +110,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callFloatMethodNative(JNIEnv 
 
 extern "C"
 JNIEXPORT jdouble JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callDoubleMethodNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callDoubleMethod(JNIEnv *env,
                                                                           jobject obj) {
 
     jpp::Env jpp_env(env);
@@ -120,7 +120,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callDoubleMethodNative(JNIEnv
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_org_coderoller_jnisample_testers_MethodTester_callGetClassNative(JNIEnv *env,
+Java_org_coderoller_jnisample_testers_MethodTester_callGetClass(JNIEnv *env,
                                                                       jobject obj) {
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
