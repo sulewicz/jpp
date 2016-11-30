@@ -50,6 +50,29 @@ public class MethodUnitTest {
     }
 
     @Test
+    public void testInvokingMultiArrayParamMethod() throws Exception {
+        Object[] o = new Object[1];
+        boolean[] bool = new boolean[2];
+        byte[] b = new byte[3];
+        char[] c = new char[4];
+        short[] s = new short[5];
+        int[] i = new int[6];
+        long[] l = new long[7];
+        float[] f = new float[8];
+        double[] d = new double[9];
+        mTester.callMultiParamArrayMethod(o, bool, b, c, s, i, l, f, d);
+        assertTrue(o == mTester.getObjectArray());
+        assertEquals(bool, mTester.getBooleanArray());
+        assertEquals(b, mTester.getByteArray());
+        assertEquals(c, mTester.getCharArray());
+        assertEquals(s, mTester.getShortArray());
+        assertEquals(i, mTester.getIntArray());
+        assertEquals(l, mTester.getLongArray());
+        assertEquals(f, mTester.getFloatArray());
+        assertEquals(d, mTester.getDoubleArray());
+    }
+
+    @Test
     public void testReturningObject() throws Exception {
         Object o = new Integer(3);
         mTester.setObject(o);

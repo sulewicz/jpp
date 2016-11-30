@@ -5,6 +5,8 @@ public class MethodTester {
         System.loadLibrary("native-lib");
     }
 
+    // All types
+
     private Object mObject = null;
     private boolean mVoidCalled = false;
     private boolean mBoolean = false;
@@ -15,6 +17,17 @@ public class MethodTester {
     private long mLong = 0;
     private float mFloat = 0;
     private double mDouble = 0;
+
+    // All array types
+    private Object[] mObjectArray = null;
+    private boolean[] mBooleanArray = null;
+    private byte[] mByteArray = null;
+    private char[] mCharArray = null;
+    private short[] mShortArray = null;
+    private int[] mIntArray = null;
+    private long[] mLongArray = null;
+    private float[] mFloatArray = null;
+    private double[] mDoubleArray = null;
 
     // Methods invoked from native layer.
 
@@ -28,6 +41,19 @@ public class MethodTester {
         mLong = l;
         mFloat = f;
         mDouble = d;
+    }
+
+    private void multiParamArrayMethod(Object[] o, boolean[] bool, byte[] b, char[] c, short[] s, int[] i, long[] l, float[] f, double[]
+            d) {
+        mObjectArray = o;
+        mBooleanArray = bool;
+        mByteArray = b;
+        mCharArray = c;
+        mShortArray = s;
+        mIntArray = i;
+        mLongArray = l;
+        mFloatArray = f;
+        mDoubleArray = d;
     }
 
     private Object objectMethod() {
@@ -144,6 +170,78 @@ public class MethodTester {
         mDouble = aDouble;
     }
 
+    public Object[] getObjectArray() {
+        return mObjectArray;
+    }
+
+    public void setObjectArray(Object[] objectArray) {
+        mObjectArray = objectArray;
+    }
+
+    public boolean[] getBooleanArray() {
+        return mBooleanArray;
+    }
+
+    public void setBooleanArray(boolean[] booleanArray) {
+        mBooleanArray = booleanArray;
+    }
+
+    public byte[] getByteArray() {
+        return mByteArray;
+    }
+
+    public void setByteArray(byte[] byteArray) {
+        mByteArray = byteArray;
+    }
+
+    public char[] getCharArray() {
+        return mCharArray;
+    }
+
+    public void setCharArray(char[] charArray) {
+        mCharArray = charArray;
+    }
+
+    public short[] getShortArray() {
+        return mShortArray;
+    }
+
+    public void setShortArray(short[] shortArray) {
+        mShortArray = shortArray;
+    }
+
+    public int[] getIntArray() {
+        return mIntArray;
+    }
+
+    public void setIntArray(int[] intArray) {
+        mIntArray = intArray;
+    }
+
+    public long[] getLongArray() {
+        return mLongArray;
+    }
+
+    public void setLongArray(long[] longArray) {
+        mLongArray = longArray;
+    }
+
+    public float[] getFloatArray() {
+        return mFloatArray;
+    }
+
+    public void setFloatArray(float[] floatArray) {
+        mFloatArray = floatArray;
+    }
+
+    public double[] getDoubleArray() {
+        return mDoubleArray;
+    }
+
+    public void setDoubleArray(double[] doubleArray) {
+        mDoubleArray = doubleArray;
+    }
+
     // Methods used for actual testing.
 
     public boolean callVoidMethod() {
@@ -154,6 +252,9 @@ public class MethodTester {
     }
 
     public native void callMultiParamMethod(Object o, boolean bool, byte b, char c, short s, int i, long l, float f, double d);
+
+    public native void callMultiParamArrayMethod(Object[] o, boolean[] bool, byte[] b, char[] c, short[] s, int[] i, long[] l, float[] f,
+                                                 double[] d);
 
     public native Object callObjectMethod();
 

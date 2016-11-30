@@ -4,13 +4,13 @@
 extern "C"
 JNIEXPORT void JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callMultiParamMethod(JNIEnv *env,
-                                                                              jobject obj,
-                                                                              jobject o,
-                                                                              jboolean boolean,
-                                                                              jbyte b, jchar c,
-                                                                              jshort s, jint i,
-                                                                              jlong l, jfloat f,
-                                                                              jdouble d) {
+                                                                        jobject obj,
+                                                                        jobject o,
+                                                                        jboolean boolean,
+                                                                        jbyte b, jchar c,
+                                                                        jshort s, jint i,
+                                                                        jlong l, jfloat f,
+                                                                        jdouble d) {
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
     method_tester_object.call_void("multiParamMethod", jpp_env.wrap("java/lang/Object", o), boolean,
@@ -19,9 +19,38 @@ Java_org_coderoller_jnisample_testers_MethodTester_callMultiParamMethod(JNIEnv *
 }
 
 extern "C"
+JNIEXPORT void JNICALL
+Java_org_coderoller_jnisample_testers_MethodTester_callMultiParamArrayMethod(JNIEnv *env,
+                                                                             jobject obj,
+                                                                             jobjectArray o,
+                                                                             jbooleanArray boolean,
+                                                                             jbyteArray b,
+                                                                             jcharArray c,
+                                                                             jshortArray s,
+                                                                             jintArray i,
+                                                                             jlongArray l,
+                                                                             jfloatArray f,
+                                                                             jdoubleArray d) {
+    jpp::Env jpp_env(env);
+    jpp::Object method_tester_object = jpp_env.wrap(obj);
+    auto object_array = jpp_env.wrap(o);
+    auto boolean_array = jpp_env.wrap(boolean);
+    auto byte_array = jpp_env.wrap(b);
+    auto char_array = jpp_env.wrap(c);
+    auto short_array = jpp_env.wrap(s);
+    auto int_array = jpp_env.wrap(i);
+    auto long_array = jpp_env.wrap(l);
+    auto float_array = jpp_env.wrap(f);
+    auto double_array = jpp_env.wrap(d);
+    method_tester_object.call_void("multiParamArrayMethod", object_array, boolean_array, byte_array,
+                                   char_array, short_array, int_array, long_array, float_array,
+                                   double_array);
+}
+
+extern "C"
 JNIEXPORT jobject JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callObjectMethod(JNIEnv *env,
-                                                                          jobject obj) {
+                                                                    jobject obj) {
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
     jpp::Class return_class = jpp_env.find_class("java/lang/Object");
@@ -41,7 +70,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callVoidMethodNative(JNIEnv *
 extern "C"
 JNIEXPORT jboolean JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callBooleanMethod(JNIEnv *env,
-                                                                           jobject obj) {
+                                                                     jobject obj) {
 
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
@@ -51,7 +80,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callBooleanMethod(JNIEnv *env
 extern "C"
 JNIEXPORT jbyte JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callByteMethod(JNIEnv *env,
-                                                                        jobject obj) {
+                                                                  jobject obj) {
 
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
@@ -61,7 +90,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callByteMethod(JNIEnv *env,
 extern "C"
 JNIEXPORT jchar JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callCharMethod(JNIEnv *env,
-                                                                        jobject obj) {
+                                                                  jobject obj) {
 
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
@@ -71,7 +100,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callCharMethod(JNIEnv *env,
 extern "C"
 JNIEXPORT jshort JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callShortMethod(JNIEnv *env,
-                                                                         jobject obj) {
+                                                                   jobject obj) {
 
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
@@ -81,7 +110,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callShortMethod(JNIEnv *env,
 extern "C"
 JNIEXPORT jint JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callIntMethod(JNIEnv *env,
-                                                                       jobject obj) {
+                                                                 jobject obj) {
 
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
@@ -91,7 +120,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callIntMethod(JNIEnv *env,
 extern "C"
 JNIEXPORT jlong JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callLongMethod(JNIEnv *env,
-                                                                        jobject obj) {
+                                                                  jobject obj) {
 
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
@@ -101,7 +130,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callLongMethod(JNIEnv *env,
 extern "C"
 JNIEXPORT jfloat JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callFloatMethod(JNIEnv *env,
-                                                                         jobject obj) {
+                                                                   jobject obj) {
 
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
@@ -111,7 +140,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callFloatMethod(JNIEnv *env,
 extern "C"
 JNIEXPORT jdouble JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callDoubleMethod(JNIEnv *env,
-                                                                          jobject obj) {
+                                                                    jobject obj) {
 
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
@@ -121,7 +150,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callDoubleMethod(JNIEnv *env,
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callGetClass(JNIEnv *env,
-                                                                      jobject obj) {
+                                                                jobject obj) {
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
     return env->NewLocalRef(method_tester_object.get_jclass());
