@@ -9,10 +9,10 @@
 
 using namespace jpp;
 
-Object::Object(Class &_class) : m_class(new Class(_class)) {
+Object::Object(const Class &_class) : m_class(new Class(_class)) {
 }
 
-Object::Object(Class &_class, jobject object) : m_class(new Class(_class)) {
+Object::Object(const Class &_class, jobject object) : m_class(new Class(_class)) {
     if (object != nullptr) {
         m_jobject = m_class->get_env()->get_jenv()->NewLocalRef(object);
     }
@@ -74,17 +74,21 @@ jobject Object::get_jobject() const {
     return m_jobject;
 }
 
-bool Object::is_instance_of(Class &other) {
+bool Object::is_instance_of(const Class &other) {
     return is_valid() && get_env()->get_jenv()->IsInstanceOf(m_jobject, other.get_jclass());
 }
 
-bool Object::cast_to(Class &other) {
+Object Object::cast_to(const Class &other) {
     if (is_instance_of(other)) {
-        delete m_class;
-        m_class = new Class(other);
-        return true;
+        return Object(other, m_jobject);
+    } else {
+        return Object(*m_class);
     }
-    return false;
+}
+
+Object Object::cast_to(const char *class_name) {
+    Class other = get_env()->find_class(class_name);
+    return cast_to(other);
 }
 
 Object Object::do_call(const char *method_name, const char *signature,

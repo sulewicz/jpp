@@ -1,0 +1,5 @@
+#pragma once
+
+#ifndef JPP_EXCEPTIONS_SUPPORTED
+#define JPP_EXCEPTIONS_SUPPORTED 1
+#endif

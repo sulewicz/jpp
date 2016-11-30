@@ -32,9 +32,6 @@ Java_org_coderoller_jnisample_testers_ObjectTester_castTo(JNIEnv *env, jobject i
     jpp::Env jpp_env(env);
     auto object = jpp_env.wrap(_jobject);
     auto _class = jpp_env.wrap((jclass) _jclass);
-    if (object.cast_to(_class)) {
-        return object.get_class() == _class;
-    } else {
-        return false;
-    }
+    auto casted_object = object.cast_to(_class);
+    return casted_object.is_valid() && casted_object.get_class() == _class;
 }

@@ -18,7 +18,12 @@ namespace jpp {
         Cache &get_cache();
         JNIEnv *get_jenv();
 
-        Class find_class(const char *name);
+        bool is_exception_pending();
+        Object consume_exception();
+        void cancel_exception();
+        void check_for_exception();
+
+        Class find_class(const char *class_name);
 
         Class wrap(jclass _jclass);
         Object wrap(jobject _jobject);

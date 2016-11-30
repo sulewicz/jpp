@@ -20,6 +20,7 @@ add_library( # Sets the name of the library.
              # file are automatically included.
              src/main/cpp/array_tester.cpp
              src/main/cpp/class_tester.cpp
+             src/main/cpp/exception_tester.cpp
              src/main/cpp/method_tester.cpp
              src/main/cpp/object_tester.cpp
              src/main/cpp/static_method_tester.cpp
@@ -29,6 +30,8 @@ add_library( # Sets the name of the library.
              src/main/cpp/jpp/Env.cpp
              src/main/cpp/jpp/Object.cpp
              src/main/cpp/jpp/internal/type.cpp)
+
+target_compile_options(native-lib PRIVATE -fexceptions)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because system libraries are included in the search path by

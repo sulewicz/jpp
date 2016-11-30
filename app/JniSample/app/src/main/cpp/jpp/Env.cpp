@@ -1,8 +1,6 @@
+#include "jpp_config.h"
 #include "Env.h"
 #include "Cache.h"
-#include "Class.h"
-#include "Object.h"
-
 #include <algorithm>
 
 using namespace jpp;
@@ -29,9 +27,37 @@ JNIEnv *Env::get_jenv() {
     return m_jenv;
 }
 
-Class Env::find_class(const char *name) {
-    auto _jclass = m_jenv->FindClass(name);
-    auto ret = m_cache.add_class(this, name, _jclass);
+bool Env::is_exception_pending() {
+    return m_jenv->ExceptionCheck();
+}
+
+Object Env::consume_exception() {
+    jthrowable _jthrowable = m_jenv->ExceptionOccurred();
+    m_jenv->ExceptionClear();
+    return wrap(_jthrowable);
+}
+
+void Env::cancel_exception() {
+    m_jenv->ExceptionClear();
+}
+
+void Env::check_for_exception() {
+#if JPP_EXCEPTIONS_SUPPORTED
+    if (m_jenv->ExceptionCheck()) {
+        jthrowable _jthrowable = m_jenv->ExceptionOccurred();
+        m_jenv->ExceptionClear();
+        throw wrap(_jthrowable);
+    }
+#endif
+}
+
+Class Env::find_class(const char *class_name) {
+    Class ret = m_cache.get_class(this, class_name);
+    if (!ret.is_valid()) {
+        auto _jclass = m_jenv->FindClass(class_name);
+        check_for_exception();
+        ret = m_cache.add_class(this, class_name, _jclass);
+    }
     return ret;
 }
 

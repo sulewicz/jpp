@@ -23,20 +23,21 @@ namespace jpp {
         jclass get_jclass() const;
         jobject get_jobject() const;
 
-        bool is_instance_of(Class& other);
-        bool cast_to(Class& other);
+        bool is_instance_of(const Class &other);
+        Object cast_to(const Class &other);
+        Object cast_to(const char *class_name);
 
         template<class ... Types>
         Object call_object(const char *method_name, Class &return_type, Types ... args) {
             auto signature = internal::generate_signature(return_type, args...);
             return do_call(method_name, signature.c_str(),
-                                  internal::flatten(args)...);
+                           internal::flatten(args)...);
         }
 
         template<class ... Types>
         void call_void(const char *method_name, Types ... args) {
             auto signature = internal::generate_signature((void *) 0, args...);
-            do_call((void*)0,method_name, signature.c_str(), internal::flatten(args)...);
+            do_call((void *) 0, method_name, signature.c_str(), internal::flatten(args)...);
         }
 
         template<class Ret, class ... Types>
@@ -46,12 +47,12 @@ namespace jpp {
         }
 
     protected:
-        Object(Class &_class);
-        Object(Class &_class, jobject object);
+        Object(const Class &_class);
+        Object(const Class &_class, jobject object);
 
     private:
         Object do_call(const char *method_name, const char *signature,
-                              ...);
+                       ...);
         void do_call(void *type, const char *method_name, const char *signature, ...);
         template<class Ret>
         Ret do_call(Ret type, const char *method_name, const char *signature, ...);
