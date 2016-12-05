@@ -9,6 +9,9 @@
 
 using namespace jpp;
 
+Object::Object() {
+}
+
 Object::Object(const Class &_class) : m_class(new Class(_class)) {
 }
 

@@ -8,8 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class ExceptionUnitTest {
@@ -33,8 +36,17 @@ public class ExceptionUnitTest {
     }
 
     @Test
-    public void testMethodNotFoundException() {
-        // TODO
+    public void testNoSuchMethodError() {
+        mTester.simulateNoSuchMethodError();
+        assertNotNull(mTester.getThrowable());
+        assertTrue(mTester.getThrowable() instanceof NoSuchMethodError);
+    }
+
+    @Test
+    public void testNoSuchStaticMethodError() {
+        mTester.simulateNoSuchStaticMethodError();
+        assertNotNull(mTester.getThrowable());
+        assertTrue(mTester.getThrowable() instanceof NoSuchMethodError);
     }
 
     @Test
@@ -44,22 +56,63 @@ public class ExceptionUnitTest {
 
     @Test
     public void testMethodCallingException() {
-        // TODO
+        mTester.simulateUnsupportedOperationException();
+        assertNotNull(mTester.getThrowable());
+        assertTrue(mTester.getThrowable() instanceof UnsupportedOperationException);
+    }
+
+    @Test
+    public void testStaticMethodCallingException() {
+        mTester.simulateStaticUnsupportedOperationException();
+        assertNotNull(mTester.getThrowable());
+        assertTrue(mTester.getThrowable() instanceof UnsupportedOperationException);
+    }
+
+    @Test
+    public void testThrowingExceptionFromNative() {
+        try {
+            mTester.throwException(IllegalArgumentException.class);
+            fail();
+        } catch (Throwable t) {
+            assertTrue(t instanceof IllegalArgumentException);
+        }
     }
 
     @Test
     public void testConstructorException() {
-        // TODO
+        mTester.simulateConstructorException(new RuntimeException());
+        assertNotNull(mTester.getThrowable());
+        assertTrue(mTester.getThrowable() instanceof RuntimeException);
+    }
+
+    @Test
+    public void testNoSuchConstructorException() {
+        mTester.simulateNoSuchConstructorException();
+        assertNotNull(mTester.getThrowable());
+        assertTrue(mTester.getThrowable() instanceof NoSuchMethodError);
     }
 
     @Test
     public void testArrayGetItemException() {
-        // TODO
+        final Object[] array = new Object[] { "a", "b" };
+        Object item = mTester.safeGetItem(array, 1);
+        assertEquals(item, array[1]);
+        assertNull(mTester.getThrowable());
+        item = mTester.safeGetItem(array, 2);
+        assertNull(item);
+        assertNotNull(mTester.getThrowable());
+        assertTrue(mTester.getThrowable() instanceof ArrayIndexOutOfBoundsException);
     }
 
     @Test
     public void testArraySetItemException() {
-        // TODO
+        final Object[] array = new Object[] { "a", "b" };
+        mTester.safeSetItem(array, 1, "c");
+        assertEquals("c", array[1]);
+        assertNull(mTester.getThrowable());
+        mTester.safeSetItem(array, 2, "d");
+        assertNotNull(mTester.getThrowable());
+        assertTrue(mTester.getThrowable() instanceof ArrayIndexOutOfBoundsException);
     }
 
     @Test

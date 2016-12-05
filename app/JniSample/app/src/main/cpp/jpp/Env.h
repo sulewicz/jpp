@@ -22,6 +22,7 @@ namespace jpp {
         Object consume_exception();
         void cancel_exception();
         void check_for_exception();
+        bool throw_exception(Object &exception);
 
         Class find_class(const char *class_name);
 
@@ -53,6 +54,9 @@ namespace jpp {
         Class get_superclass(Class &_class);
 
         jmethodID find_method_id(Class &_class, const char *name, const char *signature);
+
+        Object call_constructor(Class &_class, const char *signature, va_list vl);
+
         Object call_method(Object &object, const char *method_name,
                            const char *signature, va_list vl);
         void call_method(Object &object, const char *method_name,

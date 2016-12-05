@@ -32,7 +32,7 @@ Class &Class::operator=(const Class &other) {
 }
 
 bool Class::operator==(const Class &other) {
-    return m_env->get_jenv()->IsSameObject(m_jclass, other.m_jclass);
+    return get_env()->get_jenv()->IsSameObject(m_jclass, other.m_jclass);
 }
 
 bool Class::operator!=(const Class &other) {
@@ -90,12 +90,11 @@ Object Class::do_create(const char *signature,
 
     if (is_object_class()) {
         VA_START
-        jmethodID method_id = m_env->find_method_id(*this, "<init>", signature);
-        auto object = m_env->get_jenv()->NewObjectV(get_jclass(), method_id, vl);
+        auto ret = get_env()->call_constructor(*this, signature, vl);
         VA_END
-        return m_env->wrap(*this, object);
+        return ret;
     } else {
-        return m_env->wrap(*this, nullptr);
+        return get_env()->wrap(*this, nullptr);
     }
 }
 

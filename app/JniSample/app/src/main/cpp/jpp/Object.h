@@ -47,6 +47,7 @@ namespace jpp {
         }
 
     protected:
+        Object();
         Object(const Class &_class);
         Object(const Class &_class, jobject object);
 

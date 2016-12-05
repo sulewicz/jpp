@@ -51,6 +51,15 @@ void Env::check_for_exception() {
 #endif
 }
 
+bool Env::throw_exception(Object &exception) {
+    if (exception.is_instance_of(find_class("java/lang/Throwable"))) {
+        m_jenv->Throw((jthrowable) exception.get_jobject());
+        return true;
+    } else {
+        return false;
+    }
+}
+
 Class Env::find_class(const char *class_name) {
     Class ret = m_cache.get_class(this, class_name);
     if (!ret.is_valid()) {
@@ -206,148 +215,275 @@ Class Env::get_superclass(Class &_class) {
 }
 
 jmethodID Env::find_method_id(Class &_class, const char *name, const char *signature) {
-    return m_jenv->GetMethodID(_class.get_jclass(), name, signature);
+    jmethodID ret = m_jenv->GetMethodID(_class.get_jclass(), name, signature);
+    check_for_exception();
+    return ret;
+}
+
+Object Env::call_constructor(Class &_class, const char *signature, va_list vl) {
+    jmethodID method_id = find_method_id(_class, "<init>", signature);
+    if (method_id) {
+        auto ret = m_jenv->NewObjectV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+        return Object(_class, ret);
+    } else {
+        return Object(_class, nullptr);
+    }
 }
 
 Object Env::call_method(Object &object, const char *method_name,
                         const char *signature, va_list vl) {
     jmethodID method_id = find_method_id(object.get_class(), method_name, signature);
-    jobject ret = m_jenv->CallObjectMethodV(object.get_jobject(), method_id, vl);
-    return wrap(ret);
+    if (method_id) {
+        auto ret = m_jenv->CallObjectMethodV(object.get_jobject(), method_id, vl);
+        check_for_exception();
+        return wrap(ret);
+    } else {
+        return Object();
+    }
 }
 
 void Env::call_method(Object &object, const char *method_name,
                       const char *signature, va_list vl, void *type) {
     jmethodID method_id = find_method_id(object.get_class(), method_name, signature);
-    m_jenv->CallVoidMethodV(object.get_jobject(), method_id, vl);
+    if (method_id) {
+        m_jenv->CallVoidMethodV(object.get_jobject(), method_id, vl);
+        check_for_exception();
+    }
 }
 
 template<>
 jboolean Env::call_method(Object &object, const char *method_name,
                           const char *signature, va_list vl, jboolean type) {
     jmethodID method_id = find_method_id(object.get_class(), method_name, signature);
-    return m_jenv->CallBooleanMethodV(object.get_jobject(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallBooleanMethodV(object.get_jobject(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return false;
+    }
 }
 
 template<>
 jbyte Env::call_method(Object &object, const char *method_name,
                        const char *signature, va_list vl, jbyte type) {
     jmethodID method_id = find_method_id(object.get_class(), method_name, signature);
-    return m_jenv->CallByteMethodV(object.get_jobject(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallByteMethodV(object.get_jobject(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jchar Env::call_method(Object &object, const char *method_name,
                        const char *signature, va_list vl, jchar type) {
     jmethodID method_id = find_method_id(object.get_class(), method_name, signature);
-    return m_jenv->CallCharMethodV(object.get_jobject(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallCharMethodV(object.get_jobject(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jshort Env::call_method(Object &object, const char *method_name,
                         const char *signature, va_list vl, jshort type) {
     jmethodID method_id = find_method_id(object.get_class(), method_name, signature);
-    return m_jenv->CallShortMethodV(object.get_jobject(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallShortMethodV(object.get_jobject(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jint Env::call_method(Object &object, const char *method_name,
                       const char *signature, va_list vl, jint type) {
     jmethodID method_id = find_method_id(object.get_class(), method_name, signature);
-    return m_jenv->CallIntMethodV(object.get_jobject(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallIntMethodV(object.get_jobject(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jlong Env::call_method(Object &object, const char *method_name,
                        const char *signature, va_list vl, jlong type) {
     jmethodID method_id = find_method_id(object.get_class(), method_name, signature);
-    return m_jenv->CallLongMethodV(object.get_jobject(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallLongMethodV(object.get_jobject(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jfloat Env::call_method(Object &object, const char *method_name,
                         const char *signature, va_list vl, jfloat type) {
     jmethodID method_id = find_method_id(object.get_class(), method_name, signature);
-    return m_jenv->CallFloatMethodV(object.get_jobject(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallFloatMethodV(object.get_jobject(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jdouble Env::call_method(Object &object, const char *method_name,
                          const char *signature, va_list vl, jdouble type) {
     jmethodID method_id = find_method_id(object.get_class(), method_name, signature);
-    return m_jenv->CallDoubleMethodV(object.get_jobject(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallDoubleMethodV(object.get_jobject(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 
 jmethodID Env::find_static_method_id(Class &_class, const char *name, const char *signature) {
-    return m_jenv->GetStaticMethodID(_class.get_jclass(), name, signature);
+    jmethodID ret = m_jenv->GetStaticMethodID(_class.get_jclass(), name, signature);
+    check_for_exception();
+    return ret;
 }
 
 Object Env::call_static_method(Class &_class, const char *method_name,
                                const char *signature, va_list vl) {
     jmethodID method_id = find_static_method_id(_class, method_name, signature);
-    jobject ret = m_jenv->CallStaticObjectMethodV(_class.get_jclass(), method_id, vl);
-    return wrap(ret);
+    if (method_id) {
+        auto ret = m_jenv->CallStaticObjectMethodV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+        return wrap(ret);
+    } else {
+        return Object();
+    }
 }
 
 void Env::call_static_method(Class &_class, const char *method_name,
                              const char *signature, va_list vl, void *type) {
     jmethodID method_id = find_static_method_id(_class, method_name, signature);
-    m_jenv->CallStaticVoidMethodV(_class.get_jclass(), method_id, vl);
+    if (method_id) {
+        m_jenv->CallStaticVoidMethodV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+    }
 }
 
 template<>
 jboolean Env::call_static_method(Class &_class, const char *method_name,
                                  const char *signature, va_list vl, jboolean type) {
     jmethodID method_id = find_static_method_id(_class, method_name, signature);
-    return m_jenv->CallStaticBooleanMethodV(_class.get_jclass(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallStaticBooleanMethodV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return false;
+    }
 }
 
 template<>
 jbyte Env::call_static_method(Class &_class, const char *method_name,
                               const char *signature, va_list vl, jbyte type) {
     jmethodID method_id = find_static_method_id(_class, method_name, signature);
-    return m_jenv->CallStaticByteMethodV(_class.get_jclass(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallStaticByteMethodV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jchar Env::call_static_method(Class &_class, const char *method_name,
                               const char *signature, va_list vl, jchar type) {
     jmethodID method_id = find_static_method_id(_class, method_name, signature);
-    return m_jenv->CallStaticCharMethodV(_class.get_jclass(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallStaticCharMethodV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jshort Env::call_static_method(Class &_class, const char *method_name,
                                const char *signature, va_list vl, jshort type) {
     jmethodID method_id = find_static_method_id(_class, method_name, signature);
-    return m_jenv->CallStaticShortMethodV(_class.get_jclass(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallStaticShortMethodV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jint Env::call_static_method(Class &_class, const char *method_name,
                              const char *signature, va_list vl, jint type) {
     jmethodID method_id = find_static_method_id(_class, method_name, signature);
-    return m_jenv->CallStaticIntMethodV(_class.get_jclass(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallStaticIntMethodV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jlong Env::call_static_method(Class &_class, const char *method_name,
                               const char *signature, va_list vl, jlong type) {
     jmethodID method_id = find_static_method_id(_class, method_name, signature);
-    return m_jenv->CallStaticLongMethodV(_class.get_jclass(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallStaticLongMethodV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jfloat Env::call_static_method(Class &_class, const char *method_name,
                                const char *signature, va_list vl, jfloat type) {
     jmethodID method_id = find_static_method_id(_class, method_name, signature);
-    return m_jenv->CallStaticFloatMethodV(_class.get_jclass(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallStaticFloatMethodV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
 
 template<>
 jdouble Env::call_static_method(Class &_class, const char *method_name,
                                 const char *signature, va_list vl, jdouble type) {
     jmethodID method_id = find_static_method_id(_class, method_name, signature);
-    return m_jenv->CallStaticDoubleMethodV(_class.get_jclass(), method_id, vl);
+    if (method_id) {
+        auto ret = m_jenv->CallStaticDoubleMethodV(_class.get_jclass(), method_id, vl);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
 }
