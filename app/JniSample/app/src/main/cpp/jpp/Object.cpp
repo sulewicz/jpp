@@ -61,7 +61,7 @@ bool Object::is_valid() const {
     return m_class != nullptr && m_jobject != nullptr;
 }
 
-Class &Object::get_class() {
+Class &Object::get_class() const {
     return *m_class;
 }
 

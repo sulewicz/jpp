@@ -148,6 +148,38 @@ Java_org_coderoller_jnisample_testers_MethodTester_callDoubleMethod(JNIEnv *env,
 }
 
 extern "C"
+JNIEXPORT jobjectArray JNICALL
+Java_org_coderoller_jnisample_testers_MethodTester_callObjectArrayMethod(JNIEnv *env,
+                                                                         jobject obj) {
+    jpp::Env jpp_env(env);
+    jpp::Object method_tester_object = jpp_env.wrap(obj);
+    jpp::Class return_class = jpp_env.find_array_class("java/lang/Object");
+    auto ret = (jpp::Array<jpp::Object>) method_tester_object.call_object("objectArrayMethod",
+                                                                          return_class);
+    if (ret.get_length() > 0) {
+        return (jobjectArray) env->NewLocalRef(ret.get_jarray());
+    } else {
+        return nullptr;
+    }
+}
+
+extern "C"
+JNIEXPORT jbyteArray JNICALL
+Java_org_coderoller_jnisample_testers_MethodTester_callByteArrayMethod(JNIEnv *env,
+                                                                       jobject obj) {
+    jpp::Env jpp_env(env);
+    jpp::Object method_tester_object = jpp_env.wrap(obj);
+    jpp::Class return_class = jpp_env.find_array_class<jbyte>();
+    auto ret = (jpp::Array<jbyte>) method_tester_object.call_object("byteArrayMethod",
+                                                                    return_class);
+    if (ret.get_length() > 0) {
+        return (jbyteArray) env->NewLocalRef(ret.get_jarray());
+    } else {
+        return nullptr;
+    }
+}
+
+extern "C"
 JNIEXPORT jobject JNICALL
 Java_org_coderoller_jnisample_testers_MethodTester_callGetClass(JNIEnv *env,
                                                                 jobject obj) {

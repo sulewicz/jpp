@@ -2,12 +2,12 @@
 
 #include <jni.h>
 #include <string>
+#include "Class.h"
 #include "Object.h"
 #include "Array.h"
 
 namespace jpp {
     class Cache;
-    class Class;
 
     class Env {
     public:
@@ -25,6 +25,14 @@ namespace jpp {
         bool throw_exception(Object &exception);
 
         Class find_class(const char *class_name);
+        Class find_array_class(const char *class_name);
+        Class find_array_class(int dim, const char *class_name);
+        template<class Type>
+        Class find_array_class(int dim = 1, Type t = 0) {
+            char type = internal::type_to_str(t);
+            auto class_name = std::string(dim, '[') + type;
+            return find_class(class_name.c_str());
+        }
 
         Class wrap(jclass _jclass);
         Object wrap(jobject _jobject);

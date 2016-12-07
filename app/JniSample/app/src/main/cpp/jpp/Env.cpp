@@ -70,6 +70,15 @@ Class Env::find_class(const char *class_name) {
     return ret;
 }
 
+Class Env::find_array_class(const char *class_name) {
+    return find_array_class(1, class_name);
+}
+
+Class Env::find_array_class(int dim, const char *class_name) {
+    auto signature = std::string(dim, '[') + 'L' + class_name + ';';
+    return find_class(signature.c_str());
+}
+
 Class Env::wrap(jclass _jclass) {
     if (_jclass != nullptr) {
         if (m_get_name_method_id == nullptr) {

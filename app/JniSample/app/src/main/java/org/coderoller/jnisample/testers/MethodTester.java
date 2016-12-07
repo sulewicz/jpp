@@ -96,6 +96,14 @@ public class MethodTester {
         return mDouble;
     }
 
+    private Object[] objectArrayMethod() {
+        return mObjectArray;
+    }
+
+    private byte[] byteArrayMethod() {
+        return mByteArray;
+    }
+
     // Helper methods used by unit tests.
 
     public Object getObject() {
@@ -275,6 +283,10 @@ public class MethodTester {
     public native float callFloatMethod();
 
     public native double callDoubleMethod();
+
+    public native Object[] callObjectArrayMethod();
+
+    public native byte[] callByteArrayMethod();
 
     public native Class<?> callGetClass();
 }

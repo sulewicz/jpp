@@ -140,3 +140,35 @@ Java_org_coderoller_jnisample_testers_StaticMethodTester_callDoubleMethod(JNIEnv
     jpp::Class class_object = jpp_env.wrap(type);
     return class_object.call<jdouble>("doubleMethod");
 }
+
+extern "C"
+JNIEXPORT jobjectArray JNICALL
+Java_org_coderoller_jnisample_testers_StaticMethodTester_callObjectArrayMethod(JNIEnv *env,
+                                                                               jclass type) {
+    jpp::Env jpp_env(env);
+    jpp::Class class_object = jpp_env.wrap(type);
+    jpp::Class return_class = jpp_env.find_array_class("java/lang/Object");
+    auto ret = (jpp::Array<jpp::Object>) class_object.call_object("objectArrayMethod",
+                                                                          return_class);
+    if (ret.get_length() > 0) {
+        return (jobjectArray) env->NewLocalRef(ret.get_jarray());
+    } else {
+        return nullptr;
+    }
+}
+
+extern "C"
+JNIEXPORT jbyteArray JNICALL
+Java_org_coderoller_jnisample_testers_StaticMethodTester_callByteArrayMethod(JNIEnv *env,
+                                                                             jclass type) {
+    jpp::Env jpp_env(env);
+    jpp::Class class_object = jpp_env.wrap(type);
+    jpp::Class return_class = jpp_env.find_array_class<jbyte>();
+    auto ret = (jpp::Array<jbyte>) class_object.call_object("byteArrayMethod",
+                                                                    return_class);
+    if (ret.get_length() > 0) {
+        return (jbyteArray) env->NewLocalRef(ret.get_jarray());
+    } else {
+        return nullptr;
+    }
+}

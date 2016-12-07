@@ -98,6 +98,14 @@ public class StaticMethodTester {
         return sDouble;
     }
 
+    private static Object[] objectArrayMethod() {
+        return sObjectArray;
+    }
+
+    private static byte[] byteArrayMethod() {
+        return sByteArray;
+    }
+
     // Helper methods used by unit tests.
 
     public static void reset() {
@@ -301,4 +309,8 @@ public class StaticMethodTester {
     public static native float callFloatMethod();
 
     public static native double callDoubleMethod();
+
+    public static native Object[] callObjectArrayMethod();
+
+    public static native byte[] callByteArrayMethod();
 }

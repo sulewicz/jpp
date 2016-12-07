@@ -135,6 +135,20 @@ public class MethodUnitTest {
     }
 
     @Test
+    public void testReturningObjectArray() throws Exception {
+        Object[] o = new Object[] { "a", 2, "c" };
+        mTester.setObjectArray(o);
+        assertTrue(o == mTester.callObjectArrayMethod());
+    }
+
+    @Test
+    public void testReturningByteArray() throws Exception {
+        byte[] b = new byte[] { (byte) 1, (byte) 2 };
+        mTester.setByteArray(b);
+        assertTrue(b == mTester.callByteArrayMethod());
+    }
+
+    @Test
     public void testGetClass() throws Exception {
         assertTrue(mTester.callGetClass() == mTester.getClass());
     }

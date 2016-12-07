@@ -18,7 +18,7 @@ namespace jpp {
 
         bool is_valid() const;
 
-        Class &get_class();
+        Class &get_class() const;
         Env *get_env() const;
         jclass get_jclass() const;
         jobject get_jobject() const;

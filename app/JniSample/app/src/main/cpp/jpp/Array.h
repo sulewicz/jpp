@@ -25,6 +25,9 @@ namespace jpp {
     public:
         Array(const Array &other) : AbstractArray(other) { }
 
+        Array(const Object &other) : AbstractArray(other.get_class(),
+                                                   (jarray) other.get_jobject()) { }
+
         ~Array() { }
 
         Type get(size_t index);

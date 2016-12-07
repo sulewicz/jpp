@@ -125,4 +125,18 @@ public class StaticMethodUnitTest {
         StaticMethodTester.setDouble(Double.MIN_VALUE);
         assertTrue(Double.MIN_VALUE == StaticMethodTester.callDoubleMethod());
     }
+
+    @Test
+    public void testReturningObjectArray() throws Exception {
+        Object[] o = new Object[] { "a", 2, "c" };
+        StaticMethodTester.setObjectArray(o);
+        assertTrue(o == StaticMethodTester.callObjectArrayMethod());
+    }
+
+    @Test
+    public void testReturningByteArray() throws Exception {
+        byte[] b = new byte[] { (byte) 1, (byte) 2 };
+        StaticMethodTester.setByteArray(b);
+        assertTrue(b == StaticMethodTester.callByteArrayMethod());
+    }
 }
