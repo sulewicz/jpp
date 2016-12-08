@@ -117,11 +117,25 @@ public class ExceptionUnitTest {
 
     @Test
     public void testFieldGetException() {
-        // TODO
+        mTester.getNonExistingField();
+        assertNotNull(mTester.getThrowable());
+        assertTrue(mTester.getThrowable() instanceof NoSuchFieldError);
     }
 
     @Test
     public void testFieldSetException() {
+        mTester.setNonExistingField(null);
+        assertNotNull(mTester.getThrowable());
+        assertTrue(mTester.getThrowable() instanceof NoSuchFieldError);
+    }
+
+    @Test
+    public void testStaticFieldGetException() {
+        // TODO
+    }
+
+    @Test
+    public void testStaticFieldSetException() {
         // TODO
     }
 }

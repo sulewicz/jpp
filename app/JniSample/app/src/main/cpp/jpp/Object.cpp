@@ -171,3 +171,100 @@ jdouble Object::do_call(jdouble, const char *method_name, const char *signature,
     VA_END
     return ret;
 }
+
+Object Object::do_get(const char *field_name, const char *signature) {
+    auto ret = get_env()->get_field(*this, field_name, signature);
+    return ret;
+}
+
+template<>
+jboolean Object::do_get(jboolean type, const char *field_name, const char *signature) {
+    auto ret = get_env()->get_field<jboolean>(*this, field_name, signature);
+    return ret;
+}
+
+template<>
+jbyte Object::do_get(jbyte type, const char *field_name, const char *signature) {
+    auto ret = get_env()->get_field<jbyte>(*this, field_name, signature);
+    return ret;
+}
+
+template<>
+jchar Object::do_get(jchar type, const char *field_name, const char *signature) {
+    auto ret = get_env()->get_field<jchar>(*this, field_name, signature);
+    return ret;
+}
+
+template<>
+jshort Object::do_get(jshort type, const char *field_name, const char *signature) {
+    auto ret = get_env()->get_field<jshort>(*this, field_name, signature);
+    return ret;
+}
+
+template<>
+jint Object::do_get(jint type, const char *field_name, const char *signature) {
+    auto ret = get_env()->get_field<jint>(*this, field_name, signature);
+    return ret;
+}
+
+template<>
+jlong Object::do_get(jlong type, const char *field_name, const char *signature) {
+    auto ret = get_env()->get_field<jlong>(*this, field_name, signature);
+    return ret;
+}
+
+template<>
+jfloat Object::do_get(jfloat type, const char *field_name, const char *signature) {
+    auto ret = get_env()->get_field<jfloat>(*this, field_name, signature);
+    return ret;
+}
+
+template<>
+jdouble Object::do_get(jdouble type, const char *field_name, const char *signature) {
+    auto ret = get_env()->get_field<jdouble>(*this, field_name, signature);
+    return ret;
+}
+
+void Object::do_set(const char *field_name, const char *signature, const Object& value) {
+    get_env()->set_field(*this, field_name, signature, value);
+}
+
+template<>
+void Object::do_set(const char *field_name, const char *signature, const jboolean& value) {
+    get_env()->set_field<jboolean>(*this, field_name, signature, value);
+}
+
+template<>
+void Object::do_set(const char *field_name, const char *signature, const jbyte& value) {
+    get_env()->set_field<jbyte>(*this, field_name, signature, value);
+}
+
+template<>
+void Object::do_set(const char *field_name, const char *signature, const jchar& value) {
+    get_env()->set_field<jchar>(*this, field_name, signature, value);
+}
+
+template<>
+void Object::do_set(const char *field_name, const char *signature, const jshort& value) {
+    get_env()->set_field<jshort>(*this, field_name, signature, value);
+}
+
+template<>
+void Object::do_set(const char *field_name, const char *signature, const jint& value) {
+    get_env()->set_field<jint>(*this, field_name, signature, value);
+}
+
+template<>
+void Object::do_set(const char *field_name, const char *signature, const jlong& value) {
+    get_env()->set_field<jlong>(*this, field_name, signature, value);
+}
+
+template<>
+void Object::do_set(const char *field_name, const char *signature, const jfloat& value) {
+    get_env()->set_field<jfloat>(*this, field_name, signature, value);
+}
+
+template<>
+void Object::do_set(const char *field_name, const char *signature, const jdouble& value) {
+    get_env()->set_field<jdouble>(*this, field_name, signature, value);
+}

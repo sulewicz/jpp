@@ -27,10 +27,10 @@ namespace jpp {
         Class find_class(const char *class_name);
         Class find_array_class(const char *class_name);
         Class find_array_class(int dim, const char *class_name);
+
         template<class Type>
         Class find_array_class(int dim = 1, Type t = 0) {
-            char type = internal::type_to_str(t);
-            auto class_name = std::string(dim, '[') + type;
+            auto class_name = std::string(dim, '[') + internal::type_to_str(t);
             return find_class(class_name.c_str());
         }
 
@@ -81,6 +81,17 @@ namespace jpp {
         template<class Ret>
         Ret call_static_method(Class &_class, const char *method_name,
                                const char *signature, va_list vl, Ret type = Ret());
+
+        jfieldID find_field_id(Class &_class, const char *name, const char *signature);
+        Object get_field(Object &object, const char *field_name, const char *signature);
+        template<class Ret>
+        Ret get_field(Object &object, const char *field_name, const char *signature,
+                      Ret type = Ret());
+        void set_field(Object &object, const char *field_name, const char *signature,
+                       const Object &value);
+        template<class Ret>
+        void set_field(Object &object, const char *field_name, const char *signature,
+                       Ret value);
 
     private:
         JNIEnv *const m_jenv;

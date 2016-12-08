@@ -21,18 +21,18 @@ namespace jpp {
         jarray flatten(AbstractArray &);
         jclass flatten(Class &);
 
-        char type_to_str(jboolean &);
-        char type_to_str(jbyte &);
-        char type_to_str(jchar &);
-        char type_to_str(jshort &);
-        char type_to_str(jint &);
-        char type_to_str(jlong &);
-        char type_to_str(jfloat &);
-        char type_to_str(jdouble &);
-        char type_to_str(void *);
-        std::string type_to_str(jstring &);
-        std::string type_to_str(Object &);
-        std::string type_to_str(AbstractArray &);
-        std::string type_to_str(Class &);
+        const char *type_to_str(const jboolean &);
+        const char *type_to_str(const jbyte &);
+        const char *type_to_str(const jchar &);
+        const char *type_to_str(const jshort &);
+        const char *type_to_str(const jint &);
+        const char *type_to_str(const jlong &);
+        const char *type_to_str(const jfloat &);
+        const char *type_to_str(const jdouble &);
+        const char *type_to_str(const void *);
+        std::string type_to_str(const jstring &);
+        std::string type_to_str(const Object &);
+        std::string type_to_str(const AbstractArray &);
+        std::string type_to_str(const Class &);
     }
 }

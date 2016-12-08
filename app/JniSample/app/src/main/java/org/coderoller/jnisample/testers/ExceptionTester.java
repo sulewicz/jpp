@@ -45,6 +45,10 @@ public class ExceptionTester {
 
     public native void simulateNoSuchConstructorException();
 
+    public native Object getNonExistingField();
+
+    public native void setNonExistingField(Object o);
+
     public native Object safeGetItem(Object[] array, int idx);
 
     public native void safeSetItem(Object[] array, int idx, Object item);

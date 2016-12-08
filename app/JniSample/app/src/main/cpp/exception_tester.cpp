@@ -225,3 +225,53 @@ Java_org_coderoller_jnisample_testers_ExceptionTester_safeSetItem(JNIEnv *env, j
 #endif
 }
 
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_org_coderoller_jnisample_testers_ExceptionTester_getNonExistingField(JNIEnv *env,
+                                                                          jobject obj) {
+    jpp::Env jpp_env(env);
+    auto exception_tester_object = jpp_env.wrap(obj);
+    auto object_class = jpp_env.find_class("java/lang/Object");
+#if JPP_EXCEPTIONS_SUPPORTED
+    try {
+        auto ret = exception_tester_object.get("noSuchField", object_class);
+        return env->NewLocalRef(ret.get_jobject());
+    } catch (jpp::Object exception_object) {
+        auto throwable_object = exception_object.cast_to(jpp_env.find_class("java/lang/Throwable"));
+        exception_tester_object.call_void("setThrowable", throwable_object);
+        return nullptr;
+    }
+#else
+    auto ret = exception_tester_object.get("noSuchField", object_class);
+    if (jpp_env.is_exception_pending()) {
+        auto throwable_object = jpp_env.consume_exception().cast_to("java/lang/Throwable");
+        exception_tester_object.call_void("setThrowable", throwable_object);
+    }
+    return nullptr;
+#endif
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_org_coderoller_jnisample_testers_ExceptionTester_setNonExistingField(JNIEnv *env,
+                                                                          jobject obj,
+                                                                          jobject o) {
+    jpp::Env jpp_env(env);
+    auto exception_tester_object = jpp_env.wrap(obj);
+    auto object_class = jpp_env.find_class("java/lang/Object");
+    auto value_object = jpp_env.wrap(object_class, o);
+#if JPP_EXCEPTIONS_SUPPORTED
+    try {
+        exception_tester_object.set("noSuchField", value_object);
+    } catch (jpp::Object exception_object) {
+        auto throwable_object = exception_object.cast_to(jpp_env.find_class("java/lang/Throwable"));
+        exception_tester_object.call_void("setThrowable", throwable_object);
+    }
+#else
+    exception_tester_object.set("noSuchField", value_object);
+    if (jpp_env.is_exception_pending()) {
+        auto throwable_object = jpp_env.consume_exception().cast_to("java/lang/Throwable");
+        exception_tester_object.call_void("setThrowable", throwable_object);
+    }
+#endif
+}

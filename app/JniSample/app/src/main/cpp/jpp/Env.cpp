@@ -496,3 +496,213 @@ jdouble Env::call_static_method(Class &_class, const char *method_name,
         return 0;
     }
 }
+
+jfieldID Env::find_field_id(Class &_class, const char *name, const char *signature) {
+    jfieldID ret = m_jenv->GetFieldID(_class.get_jclass(), name, signature);
+    check_for_exception();
+    return ret;
+}
+
+Object Env::get_field(Object &object, const char *field_name, const char *signature) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        auto ret = m_jenv->GetObjectField(object.get_jobject(), field_id);
+        check_for_exception();
+        return wrap(ret);
+    } else {
+        return Object();
+    }
+}
+
+template<>
+jboolean Env::get_field(Object &object, const char *field_name, const char *signature,
+                        jboolean type) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        auto ret = m_jenv->GetBooleanField(object.get_jobject(), field_id);
+        check_for_exception();
+        return ret;
+    } else {
+        return false;
+    }
+}
+
+template<>
+jbyte Env::get_field(Object &object, const char *field_name, const char *signature,
+                     jbyte type) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        auto ret = m_jenv->GetByteField(object.get_jobject(), field_id);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
+}
+
+template<>
+jchar Env::get_field(Object &object, const char *field_name, const char *signature,
+                     jchar type) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        auto ret = m_jenv->GetCharField(object.get_jobject(), field_id);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
+}
+
+template<>
+jshort Env::get_field(Object &object, const char *field_name, const char *signature,
+                      jshort type) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        auto ret = m_jenv->GetShortField(object.get_jobject(), field_id);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
+}
+
+template<>
+jint Env::get_field(Object &object, const char *field_name, const char *signature,
+                    jint type) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        auto ret = m_jenv->GetIntField(object.get_jobject(), field_id);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
+}
+
+template<>
+jlong Env::get_field(Object &object, const char *field_name, const char *signature,
+                     jlong type) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        auto ret = m_jenv->GetLongField(object.get_jobject(), field_id);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
+}
+
+template<>
+jfloat Env::get_field(Object &object, const char *field_name, const char *signature,
+                     jfloat type) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        auto ret = m_jenv->GetFloatField(object.get_jobject(), field_id);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
+}
+
+template<>
+jdouble Env::get_field(Object &object, const char *field_name, const char *signature,
+                       jdouble type) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        auto ret = m_jenv->GetDoubleField(object.get_jobject(), field_id);
+        check_for_exception();
+        return ret;
+    } else {
+        return 0;
+    }
+}
+
+void Env::set_field(Object &object, const char *field_name, const char *signature,
+                    const Object &value) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        m_jenv->SetObjectField(object.get_jobject(), field_id, value.get_jobject());
+        check_for_exception();
+    }
+}
+
+template<>
+void Env::set_field(Object &object, const char *field_name, const char *signature,
+                    jboolean value) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        m_jenv->SetBooleanField(object.get_jobject(), field_id, value);
+        check_for_exception();
+    }
+}
+
+template<>
+void Env::set_field(Object &object, const char *field_name, const char *signature,
+                    jbyte value) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        m_jenv->SetByteField(object.get_jobject(), field_id, value);
+        check_for_exception();
+    }
+}
+
+template<>
+void Env::set_field(Object &object, const char *field_name, const char *signature,
+                    jchar value) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        m_jenv->SetCharField(object.get_jobject(), field_id, value);
+        check_for_exception();
+    }
+}
+
+template<>
+void Env::set_field(Object &object, const char *field_name, const char *signature,
+                    jshort value) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        m_jenv->SetShortField(object.get_jobject(), field_id, value);
+        check_for_exception();
+    }
+}
+
+template<>
+void Env::set_field(Object &object, const char *field_name, const char *signature,
+                    jint value) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        m_jenv->SetIntField(object.get_jobject(), field_id, value);
+        check_for_exception();
+    }
+}
+
+template<>
+void Env::set_field(Object &object, const char *field_name, const char *signature,
+                    jlong value) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        m_jenv->SetLongField(object.get_jobject(), field_id, value);
+        check_for_exception();
+    }
+}
+
+template<>
+void Env::set_field(Object &object, const char *field_name, const char *signature,
+                    jfloat value) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        m_jenv->SetFloatField(object.get_jobject(), field_id, value);
+        check_for_exception();
+    }
+}
+
+template<>
+void Env::set_field(Object &object, const char *field_name, const char *signature,
+                    jdouble value) {
+    jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
+    if (field_id) {
+        m_jenv->SetDoubleField(object.get_jobject(), field_id, value);
+        check_for_exception();
+    }
+}
