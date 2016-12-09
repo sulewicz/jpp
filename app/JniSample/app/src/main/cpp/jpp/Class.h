@@ -56,6 +56,24 @@ namespace jpp {
             return do_call(Ret(), method_name, signature.c_str(), internal::flatten(args)...);
         }
 
+        Object get(const char *field_name, Class &field_type) {
+            return do_get(field_name, internal::type_to_str(field_type).c_str());
+        }
+
+        template<class Ret>
+        Ret get(const char *field_name) {
+            return do_get(Ret(), field_name, internal::type_to_str(Ret()));
+        }
+
+        void set(const char *field_name, const Object& value) {
+            return do_set(field_name, internal::type_to_str(value.get_class()).c_str(), value);
+        }
+
+        template<class Type>
+        void set(const char *field_name, const Type& value) {
+            return do_set(field_name, internal::type_to_str(value), value);
+        }
+
     private:
         Class(Env *env);
         Class(Env *env, jclass _class, const char *class_name);
@@ -67,6 +85,14 @@ namespace jpp {
         void do_call(void *type, const char *method_name, const char *signature, ...);
         template<class Ret>
         Ret do_call(Ret type, const char *method_name, const char *signature, ...);
+
+        Object do_get(const char *field_name, const char *signature);
+        template<class Ret>
+        Ret do_get(Ret type, const char *field_name, const char *signature);
+
+        void do_set(const char *field_name, const char *signature, const Object& value);
+        template<class Type>
+        void do_set(const char *field_name, const char *signature, const Type& value);
 
         Env *m_env;
         jclass m_jclass = nullptr;

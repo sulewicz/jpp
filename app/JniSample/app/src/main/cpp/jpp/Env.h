@@ -93,6 +93,17 @@ namespace jpp {
         void set_field(Object &object, const char *field_name, const char *signature,
                        Ret value);
 
+        jfieldID find_static_field_id(Class &_class, const char *name, const char *signature);
+        Object get_static_field(Class &_class, const char *field_name, const char *signature);
+        template<class Ret>
+        Ret get_static_field(Class &_class, const char *field_name, const char *signature,
+                      Ret type = Ret());
+        void set_static_field(Class &_class, const char *field_name, const char *signature,
+                       const Object &value);
+        template<class Ret>
+        void set_static_field(Class &_class, const char *field_name, const char *signature,
+                       Ret value);
+
     private:
         JNIEnv *const m_jenv;
         Cache &m_cache;

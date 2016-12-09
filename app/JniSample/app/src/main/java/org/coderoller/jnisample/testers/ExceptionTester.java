@@ -49,6 +49,10 @@ public class ExceptionTester {
 
     public native void setNonExistingField(Object o);
 
+    public native Object getNonExistingStaticField();
+
+    public native void setNonExistingStaticField(Object o);
+
     public native Object safeGetItem(Object[] array, int idx);
 
     public native void safeSetItem(Object[] array, int idx, Object item);
