@@ -1,11 +1,18 @@
 #include "jpp_config.h"
 #include "Env.h"
 #include "Cache.h"
+#include "JVM.h"
+#include "Monitor.h"
+
 #include <algorithm>
 
 using namespace jpp;
 
 static Cache GLOBAL_CACHE;
+
+Env::Env() : m_jenv(nullptr), m_cache(GLOBAL_CACHE) {
+
+}
 
 Env::Env(JNIEnv *jenv) : m_jenv(jenv), m_cache(GLOBAL_CACHE) {
 
@@ -19,12 +26,22 @@ Env::~Env() {
 
 }
 
+bool Env::is_valid() {
+    return m_jenv != nullptr;
+}
+
 Cache &Env::get_cache() {
     return m_cache;
 }
 
 JNIEnv *Env::get_jenv() {
     return m_jenv;
+}
+
+JVM Env::get_jvm() {
+    JavaVM *jvm;
+    m_jenv->GetJavaVM(&jvm);
+    return JVM(jvm);
 }
 
 bool Env::is_exception_pending() {
@@ -210,6 +227,14 @@ Array<jfloat> Env::create_array(size_t size, jfloat *type) {
 template<>
 Array<jdouble> Env::create_array(size_t size, jdouble *type) {
     return wrap(m_jenv->NewDoubleArray(size));
+}
+
+Monitor Env::synchronize(Class &_class) {
+    return Monitor(m_jenv, _class.get_jclass());
+}
+
+Monitor Env::synchronize(Object &object) {
+    return Monitor(m_jenv, object.get_jobject());
 }
 
 Class Env::get_superclass(Class &_class) {
@@ -593,7 +618,7 @@ jlong Env::get_field(Object &object, const char *field_name, const char *signatu
 
 template<>
 jfloat Env::get_field(Object &object, const char *field_name, const char *signature,
-                     jfloat type) {
+                      jfloat type) {
     jfieldID field_id = find_field_id(object.get_class(), field_name, signature);
     if (field_id) {
         auto ret = m_jenv->GetFloatField(object.get_jobject(), field_id);

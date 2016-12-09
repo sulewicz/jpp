@@ -22,6 +22,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/class_tester.cpp
              src/main/cpp/exception_tester.cpp
              src/main/cpp/field_tester.cpp
+             src/main/cpp/jvm_tester.cpp
              src/main/cpp/method_tester.cpp
              src/main/cpp/object_tester.cpp
              src/main/cpp/static_field_tester.cpp
@@ -30,6 +31,8 @@ add_library( # Sets the name of the library.
              src/main/cpp/jpp/Cache.cpp
              src/main/cpp/jpp/Class.cpp
              src/main/cpp/jpp/Env.cpp
+             src/main/cpp/jpp/JVM.cpp
+             src/main/cpp/jpp/Monitor.cpp
              src/main/cpp/jpp/Object.cpp
              src/main/cpp/jpp/internal/type.cpp)
 

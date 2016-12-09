@@ -8,15 +8,22 @@
 
 namespace jpp {
     class Cache;
+    class JVM;
+    class Monitor;
 
     class Env {
     public:
+        Env();
         Env(JNIEnv *jenv);
         Env(JNIEnv *jenv, Cache &cache);
         ~Env();
 
+        bool is_valid();
+
         Cache &get_cache();
         JNIEnv *get_jenv();
+
+        JVM get_jvm();
 
         bool is_exception_pending();
         Object consume_exception();
@@ -59,6 +66,9 @@ namespace jpp {
             return Array<Ret>(_class, _array);
         }
 
+        Monitor synchronize(Class &_class);
+        Monitor synchronize(Object &object);
+
         Class get_superclass(Class &_class);
 
         jmethodID find_method_id(Class &_class, const char *name, const char *signature);
@@ -97,12 +107,12 @@ namespace jpp {
         Object get_static_field(Class &_class, const char *field_name, const char *signature);
         template<class Ret>
         Ret get_static_field(Class &_class, const char *field_name, const char *signature,
-                      Ret type = Ret());
+                             Ret type = Ret());
         void set_static_field(Class &_class, const char *field_name, const char *signature,
-                       const Object &value);
+                              const Object &value);
         template<class Ret>
         void set_static_field(Class &_class, const char *field_name, const char *signature,
-                       Ret value);
+                              Ret value);
 
     private:
         JNIEnv *const m_jenv;

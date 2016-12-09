@@ -1,0 +1,67 @@
+#include <jni.h>
+#include "jpp/jpp.h"
+
+#include <thread>
+#include <chrono>
+
+static jpp::JVM JVM_INSTANCE;
+static jobject JVM_TESTER_REFERENCE = nullptr; // TODO: we should have a wrapper for this
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_org_coderoller_jnisample_testers_JvmTester_cacheJvm(JNIEnv *env, jobject obj) {
+    if (!JVM_INSTANCE.is_valid()) {
+        jpp::Env jpp_env(env);
+        JVM_INSTANCE = jpp_env.get_jvm();
+    }
+}
+
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_org_coderoller_jnisample_testers_JvmTester_createObjectFromCachedJvm(JNIEnv *env,
+                                                                         jobject obj) {
+    if (JVM_INSTANCE.is_valid()) {
+        jpp::Env jpp_env = JVM_INSTANCE.get_env();
+        if (jpp_env.is_valid()) {
+            auto object_class = jpp_env.find_class("java/lang/Object");
+            auto ret = object_class.create();
+            return jpp_env.get_jenv()->NewLocalRef(ret.get_jobject());
+        } else {
+            return nullptr;
+        }
+    } else {
+        return nullptr;
+    }
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_org_coderoller_jnisample_testers_JvmTester_asyncOperation(JNIEnv *env, jobject obj) {
+    JVM_TESTER_REFERENCE = env->NewGlobalRef(obj);
+    std::thread thread([]() {
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        if (JVM_INSTANCE.is_valid() && JVM_TESTER_REFERENCE != nullptr) {
+            jpp::Env jpp_env = JVM_INSTANCE.attach_current_thread();
+            if (jpp_env.is_valid()) {
+                // Introducing new scope to avoid object destruction after detaching from thread.
+                {
+                    auto jvm_tester_object = jpp_env.wrap(JVM_TESTER_REFERENCE);
+
+                    jpp_env.get_jenv()->DeleteGlobalRef(JVM_TESTER_REFERENCE);
+                    JVM_TESTER_REFERENCE = nullptr;
+
+                    auto object_class = jpp_env.find_class("java/lang/Object");
+                    auto result = object_class.create();
+                    {
+                        jpp::Monitor monitor = jpp_env.synchronize(jvm_tester_object);
+                        jvm_tester_object.set("mResult", result);
+                        jvm_tester_object.call_void("notifyAll");
+                    }
+                }
+                // All objects destroyed, now we can safely detach.
+                JVM_INSTANCE.detach_current_thread();
+            }
+        }
+    });
+    thread.detach();
+}

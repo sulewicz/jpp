@@ -6,3 +6,5 @@
 #include "Class.h"
 #include "Object.h"
 #include "Array.h"
+#include "JVM.h"
+#include "Monitor.h"
