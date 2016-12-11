@@ -18,12 +18,12 @@ namespace jpp {
         Env(JNIEnv *jenv, Cache &cache);
         ~Env();
 
-        bool is_valid();
+        bool is_valid() const;
 
         Cache &get_cache();
-        JNIEnv *get_jenv();
+        JNIEnv *get_jenv() const;
 
-        JVM get_jvm();
+        JVM get_jvm() const;
 
         bool is_exception_pending();
         Object consume_exception();

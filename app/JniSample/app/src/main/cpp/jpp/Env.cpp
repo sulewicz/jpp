@@ -26,7 +26,7 @@ Env::~Env() {
 
 }
 
-bool Env::is_valid() {
+bool Env::is_valid() const {
     return m_jenv != nullptr;
 }
 
@@ -34,11 +34,11 @@ Cache &Env::get_cache() {
     return m_cache;
 }
 
-JNIEnv *Env::get_jenv() {
+JNIEnv *Env::get_jenv() const {
     return m_jenv;
 }
 
-JVM Env::get_jvm() {
+JVM Env::get_jvm() const {
     JavaVM *jvm;
     m_jenv->GetJavaVM(&jvm);
     return JVM(jvm);

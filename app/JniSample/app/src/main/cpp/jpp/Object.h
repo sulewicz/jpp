@@ -6,6 +6,7 @@
 namespace jpp {
     class Env;
     class Class;
+    class GlobalRef;
 
     class Object {
     public:
@@ -87,5 +88,6 @@ namespace jpp {
         Class *m_class = nullptr;
         jobject m_jobject = nullptr;
         friend class Env;
+        friend class GlobalRef;
     };
 }

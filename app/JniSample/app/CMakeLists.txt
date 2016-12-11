@@ -31,6 +31,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/jpp/Cache.cpp
              src/main/cpp/jpp/Class.cpp
              src/main/cpp/jpp/Env.cpp
+             src/main/cpp/jpp/GlobalRef.cpp
              src/main/cpp/jpp/JVM.cpp
              src/main/cpp/jpp/Monitor.cpp
              src/main/cpp/jpp/Object.cpp

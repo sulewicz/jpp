@@ -8,3 +8,4 @@
 #include "Array.h"
 #include "JVM.h"
 #include "Monitor.h"
+#include "GlobalRef.h"
