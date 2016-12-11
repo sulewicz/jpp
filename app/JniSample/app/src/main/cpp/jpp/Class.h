@@ -18,6 +18,8 @@ namespace jpp {
         Class &operator=(const Class &other);
         bool operator==(const Class &other);
         bool operator!=(const Class &other);
+        explicit operator jobject() const;
+        jobject create_local_ref() const;
 
         bool is_valid() const;
         const char *get_class_name() const;

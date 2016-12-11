@@ -55,7 +55,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callObjectMethod(JNIEnv *env,
     jpp::Object method_tester_object = jpp_env.wrap(obj);
     jpp::Class return_class = jpp_env.find_class("java/lang/Object");
     auto ret = method_tester_object.call_object("objectMethod", return_class);
-    return env->NewLocalRef(ret.get_jobject());
+    return (jobject) ret;
 }
 
 extern "C"
@@ -157,7 +157,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callObjectArrayMethod(JNIEnv 
     auto ret = (jpp::Array<jpp::Object>) method_tester_object.call_object("objectArrayMethod",
                                                                           return_class);
     if (ret.get_length() > 0) {
-        return (jobjectArray) env->NewLocalRef(ret.get_jarray());
+        return (jobjectArray) ret.create_local_ref();
     } else {
         return nullptr;
     }
@@ -173,7 +173,7 @@ Java_org_coderoller_jnisample_testers_MethodTester_callByteArrayMethod(JNIEnv *e
     auto ret = (jpp::Array<jbyte>) method_tester_object.call_object("byteArrayMethod",
                                                                     return_class);
     if (ret.get_length() > 0) {
-        return (jbyteArray) env->NewLocalRef(ret.get_jarray());
+        return (jbyteArray) ret.create_local_ref();
     } else {
         return nullptr;
     }
@@ -185,5 +185,5 @@ Java_org_coderoller_jnisample_testers_MethodTester_callGetClass(JNIEnv *env,
                                                                 jobject obj) {
     jpp::Env jpp_env(env);
     jpp::Object method_tester_object = jpp_env.wrap(obj);
-    return env->NewLocalRef(method_tester_object.get_jclass());
+    return (jobject) method_tester_object.get_class();
 }

@@ -235,7 +235,7 @@ Java_org_coderoller_jnisample_testers_ExceptionTester_getNonExistingField(JNIEnv
 #if JPP_EXCEPTIONS_SUPPORTED
     try {
         auto ret = exception_tester_object.get("noSuchField", object_class);
-        return env->NewLocalRef(ret.get_jobject());
+        return (jobject) ret;
     } catch (jpp::Object exception_object) {
         auto throwable_object = exception_object.cast_to(jpp_env.find_class("java/lang/Throwable"));
         exception_tester_object.call_void("setThrowable", throwable_object);
@@ -287,7 +287,7 @@ Java_org_coderoller_jnisample_testers_ExceptionTester_getNonExistingStaticField(
 #if JPP_EXCEPTIONS_SUPPORTED
     try {
         auto ret = object_class.get("noSuchField", object_class);
-        return env->NewLocalRef(ret.get_jobject());
+        return (jobject) ret;
     } catch (jpp::Object exception_object) {
         auto throwable_object = exception_object.cast_to(jpp_env.find_class("java/lang/Throwable"));
         exception_tester_object.call_void("setThrowable", throwable_object);

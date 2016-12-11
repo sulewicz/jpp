@@ -24,7 +24,7 @@ Java_org_coderoller_jnisample_testers_JvmTester_createObjectFromCachedJvm(JNIEnv
         if (jpp_env.is_valid()) {
             auto object_class = jpp_env.find_class("java/lang/Object");
             auto ret = object_class.create();
-            return jpp_env.get_jenv()->NewLocalRef(ret.get_jobject());
+            return (jobject) ret;
         } else {
             return nullptr;
         }

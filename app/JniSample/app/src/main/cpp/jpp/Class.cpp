@@ -24,6 +24,9 @@ Class::Class(const Class &other) : m_env(other.m_env), m_jclass(other.m_jclass),
                                    m_class_name(other.m_class_name) {
 }
 
+Class::~Class() {
+}
+
 Class &Class::operator=(const Class &other) {
     m_env = other.m_env;
     m_jclass = other.m_jclass;
@@ -39,7 +42,16 @@ bool Class::operator!=(const Class &other) {
     return !(*this == other);
 }
 
-Class::~Class() {
+Class::operator jobject() const {
+    return create_local_ref();
+}
+
+jobject Class::create_local_ref() const {
+    if (is_valid()) {
+        return m_env->get_jenv()->NewLocalRef(m_jclass);
+    } else {
+        return nullptr;
+    }
 }
 
 bool Class::is_valid() const {

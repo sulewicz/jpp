@@ -57,6 +57,18 @@ bool Object::operator!=(const Object &other) {
     return !(*this == other);
 }
 
+Object::operator jobject() const {
+    return create_local_ref();
+}
+
+jobject Object::create_local_ref() const {
+    if (is_valid()) {
+        return get_env()->get_jenv()->NewLocalRef(m_jobject);
+    } else {
+        return nullptr;
+    }
+}
+
 bool Object::is_valid() const {
     return m_class != nullptr && m_jobject != nullptr;
 }

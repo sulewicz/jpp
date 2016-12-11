@@ -56,7 +56,7 @@ Java_org_coderoller_jnisample_testers_StaticMethodTester_callObjectMethod(JNIEnv
     jpp::Class class_object = jpp_env.wrap(type);
     jpp::Class return_class = jpp_env.find_class("java/lang/Object");
     auto ret = class_object.call_object("objectMethod", return_class);
-    return env->NewLocalRef(ret.get_jobject());
+    return (jobject) ret;
 }
 
 extern "C"
@@ -151,7 +151,7 @@ Java_org_coderoller_jnisample_testers_StaticMethodTester_callObjectArrayMethod(J
     auto ret = (jpp::Array<jpp::Object>) class_object.call_object("objectArrayMethod",
                                                                           return_class);
     if (ret.get_length() > 0) {
-        return (jobjectArray) env->NewLocalRef(ret.get_jarray());
+        return (jobjectArray) ret.create_local_ref();
     } else {
         return nullptr;
     }
@@ -167,7 +167,7 @@ Java_org_coderoller_jnisample_testers_StaticMethodTester_callByteArrayMethod(JNI
     auto ret = (jpp::Array<jbyte>) class_object.call_object("byteArrayMethod",
                                                                     return_class);
     if (ret.get_length() > 0) {
-        return (jbyteArray) env->NewLocalRef(ret.get_jarray());
+        return (jbyteArray) ret.create_local_ref();
     } else {
         return nullptr;
     }

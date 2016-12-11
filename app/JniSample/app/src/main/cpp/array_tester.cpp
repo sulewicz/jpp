@@ -5,7 +5,7 @@ template<typename ArrayType, typename ItemType>
 ArrayType create_array(JNIEnv *env, size_t size) {
     jpp::Env jpp_env(env);
     auto array_object = jpp_env.create_array<ItemType>(size);
-    return (ArrayType) env->NewLocalRef(array_object.get_jarray());
+    return (ArrayType) array_object.create_local_ref();
 }
 
 template<typename ArrayType>
@@ -37,7 +37,7 @@ Java_org_coderoller_jnisample_testers_ArrayTester_createObjectArray(JNIEnv *env,
     jpp::Env jpp_env(env);
     jpp::Class item_class = jpp_env.find_class("java/lang/Object");
     auto array_object = jpp_env.create_array(size, item_class);
-    return (jobjectArray) env->NewLocalRef(array_object.get_jarray());
+    return (jobjectArray) array_object.create_local_ref();
 }
 
 extern "C"
@@ -53,7 +53,7 @@ Java_org_coderoller_jnisample_testers_ArrayTester_getObjectItem(
         JNIEnv *env, jobject instance, jobjectArray array, jint idx) {
     jpp::Env jpp_env(env);
     jpp::Array<jpp::Object> array_object = jpp_env.wrap(array);
-    return env->NewLocalRef(array_object.get(idx).get_jobject());
+    return (jobject) array_object.get(idx);
 }
 
 extern "C"

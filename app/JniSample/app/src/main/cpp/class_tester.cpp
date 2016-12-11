@@ -8,7 +8,7 @@ Java_org_coderoller_jnisample_testers_ClassTester_createObject(JNIEnv *env,
     jpp::Env jpp_env(env);
     auto integer_class = jpp_env.find_class("java/lang/Integer");
     auto ret = integer_class.create(3);
-    return env->NewLocalRef(ret.get_jobject());
+    return (jobject) ret;
 }
 
 extern "C"
@@ -27,7 +27,7 @@ Java_org_coderoller_jnisample_testers_ClassTester_createSimpleClass(JNIEnv *env,
     auto ret = simple_class_class.create(jpp_env.wrap("java/lang/Object", o),
                                          boolean, b, c,
                                          s, i, l, f, d, jpp_env.wrap(str));
-    return env->NewLocalRef(ret.get_jobject());
+    return (jobject) ret;
 }
 
 extern "C"
@@ -37,11 +37,7 @@ Java_org_coderoller_jnisample_testers_ClassTester_getSuperclass(JNIEnv *env, job
     jpp::Env jpp_env(env);
     auto passed_class = jpp_env.wrap((jclass) _class);
     auto ret = passed_class.get_super_class();
-    if (ret.is_valid()) {
-        return env->NewLocalRef(ret.get_jclass());
-    } else {
-        return nullptr;
-    }
+    return (jobject) ret;
 }
 
 extern "C"

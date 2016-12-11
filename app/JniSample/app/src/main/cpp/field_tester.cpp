@@ -12,7 +12,7 @@ Java_org_coderoller_jnisample_testers_FieldTester_setAndGetObjectField(JNIEnv *e
     jpp::Object value_object = jpp_env.wrap(field_class, o);
     method_tester_object.set("mObject", value_object);
     auto ret = method_tester_object.get("mObject", field_class);
-    return env->NewLocalRef(ret.get_jobject());
+    return (jobject) ret;
 }
 
 template<typename Ret>
@@ -93,7 +93,7 @@ Java_org_coderoller_jnisample_testers_FieldTester_setAndGetObjectArrayField(JNIE
     jpp::Object value_object = jpp_env.wrap(field_class, o);
     method_tester_object.set("mObjectArray", value_object);
     auto ret = (jpp::Array<jpp::Object>) method_tester_object.get("mObjectArray", field_class);
-    return (jobjectArray) env->NewLocalRef(ret.get_jarray());
+    return (jobjectArray) ret.create_local_ref();
 }
 
 extern "C"
@@ -107,5 +107,5 @@ Java_org_coderoller_jnisample_testers_FieldTester_setAndGetByteArrayField(JNIEnv
     jpp::Object value_object = jpp_env.wrap(field_class, b);
     method_tester_object.set("mByteArray", value_object);
     auto ret = (jpp::Array<jbyte>) method_tester_object.get("mByteArray", field_class);
-    return (jbyteArray) env->NewLocalRef(ret.get_jarray());
+    return (jbyteArray) ret.create_local_ref();
 }

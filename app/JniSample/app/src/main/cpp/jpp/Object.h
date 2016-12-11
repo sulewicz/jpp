@@ -16,6 +16,8 @@ namespace jpp {
 
         bool operator==(const Object &other);
         bool operator!=(const Object &other);
+        explicit operator jobject() const;
+        jobject create_local_ref() const;
 
         bool is_valid() const;
 
