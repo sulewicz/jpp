@@ -8,6 +8,11 @@ namespace jpp {
     class Class;
     class Env;
 
+    /**
+    * \brief TODO: Add documentation.
+    *
+    * TODO: Add documentation.
+    */
     class GlobalRef {
     public:
         GlobalRef();

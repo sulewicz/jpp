@@ -8,6 +8,11 @@ namespace jpp {
     class Class;
     class GlobalRef;
 
+    /**
+    * \brief TODO: Add documentation.
+    *
+    * TODO: Add documentation.
+    */
     class Object {
     public:
         Object(const Object &other);

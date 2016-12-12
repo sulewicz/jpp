@@ -9,3 +9,8 @@
 #include "JVM.h"
 #include "Monitor.h"
 #include "GlobalRef.h"
+
+/**
+ * \mainpage JPP - JNI on steroids.
+ * Brace yourselves, documentation is coming!
+ */

@@ -11,6 +11,11 @@ namespace jpp {
     class JVM;
     class Monitor;
 
+    /**
+     * \brief TODO: Add documentation.
+     *
+     * TODO: Add documentation.
+     */
     class Env {
     public:
         Env();

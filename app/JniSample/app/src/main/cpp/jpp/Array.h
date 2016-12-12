@@ -7,6 +7,11 @@ namespace jpp {
     class Class;
     class Env;
 
+    /**
+    * \brief TODO: Add documentation.
+    *
+    * TODO: Add documentation.
+    */
     class AbstractArray : public Object {
     public:
         AbstractArray(const AbstractArray &other);
@@ -20,6 +25,11 @@ namespace jpp {
         AbstractArray(Class &_class, jarray array);
     };
 
+    /**
+    * \brief TODO: Add documentation.
+    *
+    * TODO: Add documentation.
+    */
     template<class Type>
     class Array : public AbstractArray {
     public:

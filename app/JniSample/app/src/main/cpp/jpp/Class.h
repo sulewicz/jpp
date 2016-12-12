@@ -10,6 +10,11 @@ namespace jpp {
     class Env;
     class Cache;
 
+    /**
+    * \brief TODO: Add documentation.
+    *
+    * TODO: Add documentation.
+    */
     class Class {
     public:
         Class(const Class &other);
