@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2017 Szymon Ulewicz.
+ * Distributed under MIT license, see LICENSE file for details.
+ */
+
 #include "Class.h"
 #include "Env.h"
 #include "Object.h"

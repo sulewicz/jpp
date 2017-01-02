@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2017 Szymon Ulewicz.
+ * Distributed under MIT license, see LICENSE file for details.
+ */
+
 #pragma once
 
 #include "jpp_config.h"
